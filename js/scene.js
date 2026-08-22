@@ -1,1269 +1,1114 @@
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+/* =========================================================
+   RAJ PATHAK PORTFOLIO
+   STEP 5.3 — 3D GALAXY ENGINE
+========================================================= */
 
-/*
-=========================================================
-RAJ PATHAK PORTFOLIO
-3D GALAXY ENGINE
-STEP 5
-
-Features:
-- Colorful galaxy
-- GPU-friendly particles
-- Nebula layers
-- Depth
-- Mouse parallax
-- Slow cinematic movement
-- Mobile performance optimization
-- Responsive canvas
-=========================================================
-*/
+import * as THREE from
+    "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
 
-/* =====================================================
-   CANVAS
-===================================================== */
+/* =========================================================
+   BASIC SETUP
+========================================================= */
 
 const canvas = document.getElementById("webgl");
 
 if (!canvas) {
-    console.warn("Galaxy canvas #webgl not found.");
+    console.warn("WebGL canvas not found.");
 } else {
 
-
-/* =====================================================
-   DEVICE / PERFORMANCE
-===================================================== */
-
-const isMobile =
-    window.matchMedia("(max-width: 700px)").matches;
-
-const isLowPower =
-    navigator.hardwareConcurrency &&
-    navigator.hardwareConcurrency <= 4;
+    const isMobile =
+        window.matchMedia("(max-width: 700px)").matches;
 
 
-/*
- * Reduce particle count on phones.
- */
+    /* =====================================================
+       SCENE
+    ===================================================== */
 
-const PARTICLE_COUNT =
-    isMobile
-        ? 7000
-        : isLowPower
-            ? 9000
-            : 16000;
+    const scene = new THREE.Scene();
 
+    scene.background = new THREE.Color(0x02010a);
 
-/* =====================================================
-   SCENE
-===================================================== */
-
-const scene = new THREE.Scene();
-
-scene.background =
-    new THREE.Color(0x02010a);
+    scene.fog = new THREE.FogExp2(
+        0x02010a,
+        isMobile ? 0.018 : 0.012
+    );
 
 
-/* =====================================================
-   CAMERA
-===================================================== */
+    /* =====================================================
+       CAMERA
+    ===================================================== */
 
-const camera =
-    new THREE.PerspectiveCamera(
+    const camera = new THREE.PerspectiveCamera(
         55,
-        window.innerWidth /
-        window.innerHeight,
+        window.innerWidth / window.innerHeight,
         0.1,
         250
     );
 
-camera.position.set(
-    0,
-    2,
-    24
-);
+    camera.position.set(
+        0,
+        0,
+        18
+    );
 
 
-/* =====================================================
-   RENDERER
-===================================================== */
+    /* =====================================================
+       RENDERER
+    ===================================================== */
 
-const renderer =
-    new THREE.WebGLRenderer({
+    const renderer = new THREE.WebGLRenderer({
         canvas,
         antialias: !isMobile,
-        alpha: false,
+        alpha: true,
         powerPreference: "high-performance"
     });
 
-
-renderer.setPixelRatio(
-    Math.min(
-        window.devicePixelRatio,
-        isMobile ? 1.25 : 1.75
-    )
-);
-
-
-renderer.setSize(
-    window.innerWidth,
-    window.innerHeight
-);
-
-
-renderer.outputColorSpace =
-    THREE.SRGBColorSpace;
-
-
-/* =====================================================
-   GALAXY GROUP
-===================================================== */
-
-const galaxy =
-    new THREE.Group();
-
-scene.add(galaxy);
-
-
-/* =====================================================
-   GALAXY PARTICLES
-===================================================== */
-
-const positions =
-    new Float32Array(
-        PARTICLE_COUNT * 3
+    renderer.setPixelRatio(
+        Math.min(
+            window.devicePixelRatio,
+            isMobile ? 1.35 : 1.8
+        )
     );
 
-const colors =
-    new Float32Array(
-        PARTICLE_COUNT * 3
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
     );
 
-const sizes =
-    new Float32Array(
-        PARTICLE_COUNT
-    );
+    renderer.outputColorSpace =
+        THREE.SRGBColorSpace;
 
 
-/* =====================================================
-   COLOR PALETTE
-===================================================== */
+    /* =====================================================
+       GALAXY GROUP
+    ===================================================== */
 
-const palette = [
+    const galaxy = new THREE.Group();
 
-    new THREE.Color(0x6c5ce7),
-
-    new THREE.Color(0x00c6ff),
-
-    new THREE.Color(0x8b5cf6),
-
-    new THREE.Color(0xff4ecd),
-
-    new THREE.Color(0x4facfe),
-
-    new THREE.Color(0xffffff)
-
-];
+    scene.add(galaxy);
 
 
-/* =====================================================
-   GALAXY SETTINGS
-===================================================== */
+    /* =====================================================
+       STAR FIELD
+    ===================================================== */
 
-const galaxyRadius =
-    isMobile ? 17 : 22;
+    const starCount =
+        isMobile ? 2800 : 5200;
 
-const galaxyDepth =
-    isMobile ? 3.5 : 5;
+    const starPositions =
+        new Float32Array(starCount * 3);
 
-const arms = 4;
-
-const armTwist = 2.8;
-
-
-/* =====================================================
-   CREATE GALAXY
-===================================================== */
-
-for (
-    let i = 0;
-    i < PARTICLE_COUNT;
-    i++
-) {
-
-    const i3 = i * 3;
+    const starColors =
+        new Float32Array(starCount * 3);
 
 
-    /*
-     * Distance from center.
-     */
+    const colorA =
+        new THREE.Color("#8b5cff");
 
-    const radius =
-        Math.pow(
-            Math.random(),
-            0.65
-        ) * galaxyRadius;
+    const colorB =
+        new THREE.Color("#00cfff");
 
+    const colorC =
+        new THREE.Color("#ff4fd8");
 
-    /*
-     * Which spiral arm?
-     */
-
-    const arm =
-        i % arms;
+    const colorD =
+        new THREE.Color("#ffffff");
 
 
-    const armAngle =
-        (arm / arms) *
-        Math.PI *
-        2;
+    for (let i = 0; i < starCount; i++) {
 
+        const radius =
+            8 +
+            Math.pow(Math.random(), 0.55) * 70;
 
-    /*
-     * Spiral rotation.
-     */
-
-    const spin =
-        radius *
-        armTwist;
-
-
-    /*
-     * Random spread.
-     */
-
-    const spread =
-        (Math.random() - 0.5) *
-        (
-            0.35 +
-            radius * 0.035
-        );
-
-
-    const angle =
-        armAngle +
-        spin +
-        spread;
-
-
-    /*
-     * Slight vertical depth.
-     */
-
-    const y =
-        (
-            Math.random() -
-            0.5
-        ) *
-        galaxyDepth *
-        (
-            1 -
-            radius /
-            galaxyRadius *
-            0.35
-        );
-
-
-    /*
-     * Position.
-     */
-
-    positions[i3] =
-        Math.cos(angle) *
-        radius;
-
-    positions[i3 + 1] =
-        y;
-
-    positions[i3 + 2] =
-        Math.sin(angle) *
-        radius;
-
-
-    /*
-     * Color based on distance.
-     */
-
-    const colorIndex =
-        Math.floor(
+        const theta =
             Math.random() *
-            palette.length
-        );
+            Math.PI *
+            2;
+
+        const spread =
+            (Math.random() - 0.5) *
+            42;
+
+        const x =
+            Math.cos(theta) *
+            radius;
+
+        const y =
+            spread *
+            (0.35 + radius / 100);
+
+        const z =
+            Math.sin(theta) *
+            radius;
 
 
-    const color =
-        palette[colorIndex].clone();
+        const index =
+            i * 3;
 
 
-    /*
-     * Slightly desaturate
-     * some distant stars.
-     */
+        starPositions[index] =
+            x;
 
-    if (
-        radius >
-        galaxyRadius * 0.7
-    ) {
+        starPositions[index + 1] =
+            y;
 
-        color.lerp(
-            new THREE.Color(0x3a3470),
-            0.35
-        );
+        starPositions[index + 2] =
+            z;
 
+
+        const randomColor =
+            Math.random();
+
+
+        let color;
+
+
+        if (randomColor < 0.25) {
+            color = colorA;
+        }
+
+        else if (randomColor < 0.5) {
+            color = colorB;
+        }
+
+        else if (randomColor < 0.7) {
+            color = colorC;
+        }
+
+        else {
+            color = colorD;
+        }
+
+
+        starColors[index] =
+            color.r;
+
+        starColors[index + 1] =
+            color.g;
+
+        starColors[index + 2] =
+            color.b;
     }
 
 
-    colors[i3] =
-        color.r;
-
-    colors[i3 + 1] =
-        color.g;
-
-    colors[i3 + 2] =
-        color.b;
+    const starGeometry =
+        new THREE.BufferGeometry();
 
 
-    /*
-     * Particle size.
-     */
-
-    sizes[i] =
-        0.5 +
-        Math.random() *
-        1.7;
-
-}
+    starGeometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(
+            starPositions,
+            3
+        )
+    );
 
 
-/* =====================================================
-   PARTICLE GEOMETRY
-===================================================== */
-
-const galaxyGeometry =
-    new THREE.BufferGeometry();
-
-
-galaxyGeometry.setAttribute(
-    "position",
-    new THREE.BufferAttribute(
-        positions,
-        3
-    )
-);
+    starGeometry.setAttribute(
+        "color",
+        new THREE.BufferAttribute(
+            starColors,
+            3
+        )
+    );
 
 
-galaxyGeometry.setAttribute(
-    "color",
-    new THREE.BufferAttribute(
-        colors,
-        3
-    )
-);
+    const starMaterial =
+        new THREE.PointsMaterial({
+
+            size:
+                isMobile
+                    ? 0.055
+                    : 0.075,
+
+            vertexColors: true,
+
+            transparent: true,
+
+            opacity: 0.82,
+
+            depthWrite: false,
+
+            blending:
+                THREE.AdditiveBlending
+        });
 
 
-galaxyGeometry.setAttribute(
-    "size",
-    new THREE.BufferAttribute(
-        sizes,
-        1
-    )
-);
-
-
-/* =====================================================
-   PARTICLE TEXTURE
-===================================================== */
-
-function createParticleTexture() {
-
-    const size = 64;
-
-    const particleCanvas =
-        document.createElement("canvas");
-
-    particleCanvas.width = size;
-    particleCanvas.height = size;
-
-
-    const context =
-        particleCanvas.getContext("2d");
-
-
-    const gradient =
-        context.createRadialGradient(
-            size / 2,
-            size / 2,
-            0,
-            size / 2,
-            size / 2,
-            size / 2
+    const stars =
+        new THREE.Points(
+            starGeometry,
+            starMaterial
         );
 
 
-    gradient.addColorStop(
-        0,
-        "rgba(255,255,255,1)"
-    );
-
-    gradient.addColorStop(
-        0.15,
-        "rgba(255,255,255,0.95)"
-    );
-
-    gradient.addColorStop(
-        0.45,
-        "rgba(255,255,255,0.35)"
-    );
-
-    gradient.addColorStop(
-        1,
-        "rgba(255,255,255,0)"
-    );
+    galaxy.add(stars);
 
 
-    context.fillStyle =
-        gradient;
+    /* =====================================================
+       NEBULA CLOUD
+    ===================================================== */
 
-    context.fillRect(
-        0,
-        0,
-        size,
-        size
-    );
+    const nebulaGeometry =
+        new THREE.BufferGeometry();
 
 
-    return new THREE.CanvasTexture(
-        particleCanvas
-    );
-
-}
+    const nebulaCount =
+        isMobile ? 550 : 950;
 
 
-const particleTexture =
-    createParticleTexture();
+    const nebulaPositions =
+        new Float32Array(
+            nebulaCount * 3
+        );
 
 
-/* =====================================================
-   PARTICLE SHADER
-===================================================== */
-
-const galaxyMaterial =
-    new THREE.ShaderMaterial({
-
-        transparent: true,
-
-        depthWrite: false,
-
-        blending:
-            THREE.AdditiveBlending,
-
-        vertexColors: true,
-
-        uniforms: {
-
-            uPixelRatio: {
-                value:
-                    renderer.getPixelRatio()
-            },
-
-            uTime: {
-                value: 0
-            }
-
-        },
+    const nebulaColors =
+        new Float32Array(
+            nebulaCount * 3
+        );
 
 
-        vertexShader: `
+    for (
+        let i = 0;
+        i < nebulaCount;
+        i++
+    ) {
 
-            attribute float size;
+        const radius =
+            7 +
+            Math.random() * 30;
 
-            varying vec3 vColor;
+        const angle =
+            Math.random() *
+            Math.PI *
+            2;
 
-            uniform float uPixelRatio;
+        const x =
+            Math.cos(angle) *
+            radius;
 
-            uniform float uTime;
+        const z =
+            Math.sin(angle) *
+            radius;
 
-            void main() {
-
-                vColor = color;
-
-                vec4 mvPosition =
-                    modelViewMatrix *
-                    vec4(position, 1.0);
-
-
-                float depth =
-                    -mvPosition.z;
-
-
-                float pulse =
-                    1.0 +
-                    sin(
-                        uTime * 1.2 +
-                        position.x *
-                        0.35
-                    ) * 0.08;
+        const y =
+            (Math.random() - 0.5) *
+            7;
 
 
-                gl_PointSize =
-                    size *
-                    uPixelRatio *
-                    7.0 *
-                    pulse /
-                    max(
-                        depth * 0.045,
-                        0.45
-                    );
+        const index =
+            i * 3;
 
 
-                gl_Position =
-                    projectionMatrix *
-                    mvPosition;
+        nebulaPositions[index] =
+            x;
 
-            }
+        nebulaPositions[index + 1] =
+            y;
 
-        `,
-
-
-        fragmentShader: `
-
-            uniform sampler2D uTexture;
-
-            varying vec3 vColor;
-
-            void main() {
-
-                float alpha =
-                    texture2D(
-                        uTexture,
-                        gl_PointCoord
-                    ).a;
+        nebulaPositions[index + 2] =
+            z;
 
 
-                if(alpha < 0.02)
-                    discard;
+        const c =
+            Math.random();
 
 
-                gl_FragColor =
-                    vec4(
-                        vColor,
-                        alpha
-                    );
+        if (c < 0.33) {
 
-            }
+            nebulaColors[index] =
+                0.32;
 
-        `
+            nebulaColors[index + 1] =
+                0.12;
 
-    });
+            nebulaColors[index + 2] =
+                0.9;
+
+        }
+
+        else if (c < 0.66) {
+
+            nebulaColors[index] =
+                0.0;
+
+            nebulaColors[index + 1] =
+                0.55;
+
+            nebulaColors[index + 2] =
+                1.0;
+
+        }
+
+        else {
+
+            nebulaColors[index] =
+                0.95;
+
+            nebulaColors[index + 1] =
+                0.08;
+
+            nebulaColors[index + 2] =
+                0.65;
+        }
+    }
 
 
-/*
- * Add texture uniform after material creation.
- */
-
-galaxyMaterial.uniforms.uTexture = {
-    value: particleTexture
-};
-
-
-/* =====================================================
-   GALAXY MESH
-===================================================== */
-
-const galaxyParticles =
-    new THREE.Points(
-        galaxyGeometry,
-        galaxyMaterial
+    nebulaGeometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(
+            nebulaPositions,
+            3
+        )
     );
 
 
-galaxy.add(
-    galaxyParticles
-);
-
-
-/* =====================================================
-   CORE GLOW
-===================================================== */
-
-const coreGeometry =
-    new THREE.SphereGeometry(
-        isMobile ? 2.0 : 2.5,
-        32,
-        32
+    nebulaGeometry.setAttribute(
+        "color",
+        new THREE.BufferAttribute(
+            nebulaColors,
+            3
+        )
     );
 
 
-const coreMaterial =
-    new THREE.MeshBasicMaterial({
-        color: 0x8b5cf6,
-        transparent: true,
-        opacity: 0.18,
-        blending:
-            THREE.AdditiveBlending,
-        depthWrite: false
-    });
+    const nebulaMaterial =
+        new THREE.PointsMaterial({
+
+            size:
+                isMobile
+                    ? 0.11
+                    : 0.16,
+
+            vertexColors: true,
+
+            transparent: true,
+
+            opacity: 0.18,
+
+            depthWrite: false,
+
+            blending:
+                THREE.AdditiveBlending
+        });
 
 
-const core =
-    new THREE.Mesh(
-        coreGeometry,
-        coreMaterial
-    );
+    const nebula =
+        new THREE.Points(
+            nebulaGeometry,
+            nebulaMaterial
+        );
 
 
-galaxy.add(core);
+    galaxy.add(nebula);
 
 
-/* =====================================================
-   INNER CORE
-===================================================== */
+    /* =====================================================
+       CENTRAL COSMIC CORE
+    ===================================================== */
 
-const innerCoreGeometry =
-    new THREE.SphereGeometry(
-        isMobile ? 0.7 : 0.9,
-        24,
-        24
-    );
+    const coreGroup =
+        new THREE.Group();
+
+    galaxy.add(coreGroup);
 
 
-const innerCoreMaterial =
-    new THREE.MeshBasicMaterial({
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0.7,
-        blending:
-            THREE.AdditiveBlending
-    });
+    /* =====================================================
+       CORE
+    ===================================================== */
 
-
-const innerCore =
-    new THREE.Mesh(
-        innerCoreGeometry,
-        innerCoreMaterial
-    );
-
-
-galaxy.add(
-    innerCore
-);
-
-
-/* =====================================================
-   NEBULA CLOUDS
-===================================================== */
-
-function createNebula(
-    color,
-    position,
-    scale,
-    opacity
-) {
-
-    const geometry =
+    const coreGeometry =
         new THREE.SphereGeometry(
-            1,
+            1.35,
+            isMobile ? 24 : 40,
+            isMobile ? 24 : 40
+        );
+
+
+    const coreMaterial =
+        new THREE.MeshBasicMaterial({
+            color: 0x030208
+        });
+
+
+    const core =
+        new THREE.Mesh(
+            coreGeometry,
+            coreMaterial
+        );
+
+
+    coreGroup.add(core);
+
+
+    /* =====================================================
+       PURPLE INNER GLOW
+    ===================================================== */
+
+    const glowGeometry =
+        new THREE.SphereGeometry(
+            1.55,
             24,
             24
         );
 
 
-    const material =
+    const glowMaterial =
         new THREE.MeshBasicMaterial({
 
-            color,
+            color: 0x714cff,
 
             transparent: true,
 
-            opacity,
+            opacity: 0.10,
 
             blending:
-                THREE.AdditiveBlending,
-
-            depthWrite: false
-
+                THREE.AdditiveBlending
         });
 
 
-    const mesh =
+    const glow =
         new THREE.Mesh(
-            geometry,
-            material
+            glowGeometry,
+            glowMaterial
         );
 
 
-    mesh.position.copy(
-        position
-    );
+    coreGroup.add(glow);
 
 
-    mesh.scale.set(
-        scale.x,
-        scale.y,
-        scale.z
-    );
+    /* =====================================================
+       ORBIT RINGS
+    ===================================================== */
+
+    function createOrbit(
+        radius,
+        tube,
+        color,
+        rotation
+    ) {
+
+        const geometry =
+            new THREE.TorusGeometry(
+                radius,
+                tube,
+                8,
+                isMobile ? 80 : 120
+            );
 
 
-    galaxy.add(mesh);
+        const material =
+            new THREE.MeshBasicMaterial({
+
+                color,
+
+                transparent: true,
+
+                opacity: 0.55,
+
+                blending:
+                    THREE.AdditiveBlending
+            });
 
 
-    return mesh;
-
-}
-
-
-/* =====================================================
-   COLORFUL NEBULA
-===================================================== */
-
-const nebulaOne =
-    createNebula(
-        0x304cff,
-        new THREE.Vector3(
-            -8,
-            1,
-            -4
-        ),
-        new THREE.Vector3(
-            9,
-            3,
-            5
-        ),
-        0.035
-    );
+        const mesh =
+            new THREE.Mesh(
+                geometry,
+                material
+            );
 
 
-const nebulaTwo =
-    createNebula(
-        0xd72fff,
-        new THREE.Vector3(
-            7,
-            -1,
-            1
-        ),
-        new THREE.Vector3(
-            8,
-            3,
-            5
-        ),
-        0.03
-    );
-
-
-const nebulaThree =
-    createNebula(
-        0x00d9ff,
-        new THREE.Vector3(
-            1,
-            3,
-            -7
-        ),
-        new THREE.Vector3(
-            7,
-            2.5,
-            4
-        ),
-        0.025
-    );
-
-
-/* =====================================================
-   STAR FIELD
-===================================================== */
-
-const starCount =
-    isMobile
-        ? 900
-        : 1800;
-
-
-const starPositions =
-    new Float32Array(
-        starCount * 3
-    );
-
-
-for (
-    let i = 0;
-    i < starCount;
-    i++
-) {
-
-    const i3 =
-        i * 3;
-
-
-    const radius =
-        35 +
-        Math.random() *
-        70;
-
-
-    const theta =
-        Math.random() *
-        Math.PI *
-        2;
-
-
-    const phi =
-        Math.acos(
-            2 *
-            Math.random()
-            -
-            1
+        mesh.rotation.set(
+            rotation.x,
+            rotation.y,
+            rotation.z
         );
 
 
-    starPositions[i3] =
-        radius *
-        Math.sin(phi) *
-        Math.cos(theta);
+        coreGroup.add(mesh);
 
 
-    starPositions[i3 + 1] =
-        radius *
-        Math.cos(phi);
-
-
-    starPositions[i3 + 2] =
-        radius *
-        Math.sin(phi) *
-        Math.sin(theta);
-
-}
-
-
-/* =====================================================
-   STAR GEOMETRY
-===================================================== */
-
-const starGeometry =
-    new THREE.BufferGeometry();
-
-
-starGeometry.setAttribute(
-    "position",
-    new THREE.BufferAttribute(
-        starPositions,
-        3
-    )
-);
-
-
-/* =====================================================
-   STAR MATERIAL
-===================================================== */
-
-const starMaterial =
-    new THREE.PointsMaterial({
-
-        color: 0xffffff,
-
-        size:
-            isMobile
-                ? 0.09
-                : 0.12,
-
-        transparent: true,
-
-        opacity: 0.7,
-
-        depthWrite: false,
-
-        blending:
-            THREE.AdditiveBlending
-
-    });
-
-
-const stars =
-    new THREE.Points(
-        starGeometry,
-        starMaterial
-    );
-
-
-scene.add(stars);
-
-
-/* =====================================================
-   MOUSE
-===================================================== */
-
-const mouse = {
-    x: 0,
-    y: 0
-};
-
-
-const targetMouse = {
-    x: 0,
-    y: 0
-};
-
-
-window.addEventListener(
-    "pointermove",
-    (event) => {
-
-        targetMouse.x =
-            (
-                event.clientX /
-                window.innerWidth
-            ) *
-            2 -
-            1;
-
-
-        targetMouse.y =
-            -(
-                event.clientY /
-                window.innerHeight
-            ) *
-            2 +
-            1;
-
-    },
-    {
-        passive: true
+        return mesh;
     }
-);
 
 
-/* =====================================================
-   TOUCH
-===================================================== */
+    const orbitOne =
+        createOrbit(
+            2.2,
+            0.035,
+            0x7d4cff,
+            {
+                x: 1.15,
+                y: 0.15,
+                z: 0.2
+            }
+        );
 
-window.addEventListener(
-    "touchmove",
-    (event) => {
 
-        if (
-            !event.touches.length
-        ) {
-            return;
+    const orbitTwo =
+        createOrbit(
+            2.65,
+            0.025,
+            0x00d5ff,
+            {
+                x: 1.0,
+                y: -0.5,
+                z: -0.2
+            }
+        );
+
+
+    const orbitThree =
+        createOrbit(
+            3.1,
+            0.018,
+            0xff4fd8,
+            {
+                x: 1.3,
+                y: 0.8,
+                z: 0.3
+            }
+        );
+
+
+    /* =====================================================
+       SMALL ORBITING PARTICLES
+    ===================================================== */
+
+    const particleCount =
+        isMobile ? 45 : 75;
+
+
+    const particleGeometry =
+        new THREE.SphereGeometry(
+            0.035,
+            6,
+            6
+        );
+
+
+    const particleMaterials = [
+
+        new THREE.MeshBasicMaterial({
+            color: 0x7c55ff
+        }),
+
+        new THREE.MeshBasicMaterial({
+            color: 0x00d9ff
+        }),
+
+        new THREE.MeshBasicMaterial({
+            color: 0xff55d8
+        })
+    ];
+
+
+    const orbitParticles = [];
+
+
+    for (
+        let i = 0;
+        i < particleCount;
+        i++
+    ) {
+
+        const particle =
+            new THREE.Mesh(
+                particleGeometry,
+                particleMaterials[
+                    i % 3
+                ]
+            );
+
+
+        const radius =
+            3 +
+            Math.random() * 4;
+
+
+        const angle =
+            Math.random() *
+            Math.PI *
+            2;
+
+
+        particle.userData = {
+
+            radius,
+
+            angle,
+
+            speed:
+                0.15 +
+                Math.random() *
+                0.35,
+
+            height:
+                (Math.random() - 0.5) *
+                1.4
+        };
+
+
+        coreGroup.add(particle);
+
+        orbitParticles.push(
+            particle
+        );
+    }
+
+
+    /* =====================================================
+       DISTANT GALAXY SPIRAL
+    ===================================================== */
+
+    const spiralCount =
+        isMobile ? 900 : 1600;
+
+
+    const spiralPositions =
+        new Float32Array(
+            spiralCount * 3
+        );
+
+
+    const spiralColors =
+        new Float32Array(
+            spiralCount * 3
+        );
+
+
+    for (
+        let i = 0;
+        i < spiralCount;
+        i++
+    ) {
+
+        const progress =
+            i / spiralCount;
+
+        const radius =
+            3.5 +
+            progress * 17;
+
+        const arm =
+            i % 3;
+
+        const angle =
+            progress * Math.PI * 8 +
+            arm * (
+                Math.PI * 2 / 3
+            );
+
+        const randomness =
+            (Math.random() - 0.5) *
+            (1.0 + progress * 3);
+
+
+        const index =
+            i * 3;
+
+
+        spiralPositions[index] =
+            Math.cos(angle) *
+            radius +
+            randomness;
+
+
+        spiralPositions[index + 1] =
+            (Math.random() - 0.5) *
+            (1.5 + progress * 3);
+
+
+        spiralPositions[index + 2] =
+            Math.sin(angle) *
+            radius +
+            randomness;
+
+
+        const color =
+            new THREE.Color();
+
+
+        if (arm === 0) {
+
+            color.setHex(
+                0x754dff
+            );
+
+        }
+
+        else if (arm === 1) {
+
+            color.setHex(
+                0x00cfff
+            );
+
+        }
+
+        else {
+
+            color.setHex(
+                0xff4fd8
+            );
         }
 
 
-        const touch =
-            event.touches[0];
+        spiralColors[index] =
+            color.r;
 
+        spiralColors[index + 1] =
+            color.g;
 
-        targetMouse.x =
-            (
-                touch.clientX /
-                window.innerWidth
-            ) *
-            2 -
-            1;
-
-
-        targetMouse.y =
-            -(
-                touch.clientY /
-                window.innerHeight
-            ) *
-            2 +
-            1;
-
-    },
-    {
-        passive: true
+        spiralColors[index + 2] =
+            color.b;
     }
-);
 
 
-/* =====================================================
-   CLOCK
-===================================================== */
+    const spiralGeometry =
+        new THREE.BufferGeometry();
 
-const clock =
-    new THREE.Clock();
 
-
-/* =====================================================
-   ANIMATION
-===================================================== */
-
-function animate() {
-
-    requestAnimationFrame(
-        animate
-    );
-
-
-    const elapsed =
-        clock.getElapsedTime();
-
-
-    /* =================================================
-       SMOOTH MOUSE
-    ================================================= */
-
-    mouse.x +=
-        (
-            targetMouse.x -
-            mouse.x
-        ) *
-        0.035;
-
-
-    mouse.y +=
-        (
-            targetMouse.y -
-            mouse.y
-        ) *
-        0.035;
-
-
-
-    /* =================================================
-       GALAXY ROTATION
-    ================================================= */
-
-    galaxy.rotation.y =
-        elapsed *
-        0.025;
-
-
-    galaxy.rotation.x =
-        Math.sin(
-            elapsed * 0.08
-        ) *
-        0.035;
-
-
-    /* =================================================
-       MOUSE PARALLAX
-    ================================================= */
-
-    galaxy.rotation.y +=
-        mouse.x *
-        0.08;
-
-
-    galaxy.rotation.x +=
-        mouse.y *
-        0.035;
-
-
-
-    /* =================================================
-       CORE PULSE
-    ================================================= */
-
-    const pulse =
-        1 +
-        Math.sin(
-            elapsed * 1.5
-        ) *
-        0.08;
-
-
-    core.scale.setScalar(
-        pulse
-    );
-
-
-    innerCore.scale.setScalar(
-        1 +
-        Math.sin(
-            elapsed * 2.0
-        ) *
-        0.06
-    );
-
-
-
-    /* =================================================
-       NEBULA MOTION
-    ================================================= */
-
-    nebulaOne.rotation.y =
-        elapsed *
-        0.025;
-
-
-    nebulaTwo.rotation.y =
-        -elapsed *
-        0.018;
-
-
-    nebulaThree.rotation.y =
-        elapsed *
-        0.015;
-
-
-
-    /* =================================================
-       STARS
-    ================================================= */
-
-    stars.rotation.y =
-        elapsed *
-        0.003;
-
-
-    stars.rotation.x =
-        Math.sin(
-            elapsed * 0.04
-        ) *
-        0.015;
-
-
-
-    /* =================================================
-       SHADER TIME
-    ================================================= */
-
-    galaxyMaterial
-        .uniforms
-        .uTime
-        .value =
-        elapsed;
-
-
-
-    /* =================================================
-       CAMERA
-    ================================================= */
-
-    const targetCameraX =
-        mouse.x *
-        1.2;
-
-
-    const targetCameraY =
-        2 +
-        mouse.y *
-        0.7;
-
-
-    camera.position.x +=
-        (
-            targetCameraX -
-            camera.position.x
-        ) *
-        0.015;
-
-
-    camera.position.y +=
-        (
-            targetCameraY -
-            camera.position.y
-        ) *
-        0.015;
-
-
-    camera.lookAt(
-        0,
-        0,
-        0
-    );
-
-
-
-    /* =================================================
-       RENDER
-    ================================================= */
-
-    renderer.render(
-        scene,
-        camera
-    );
-
-}
-
-
-/* =====================================================
-   START
-===================================================== */
-
-animate();
-
-
-/* =====================================================
-   RESIZE
-===================================================== */
-
-function resize() {
-
-    const width =
-        window.innerWidth;
-
-    const height =
-        window.innerHeight;
-
-
-    camera.aspect =
-        width / height;
-
-
-    camera.updateProjectionMatrix();
-
-
-    renderer.setSize(
-        width,
-        height
-    );
-
-
-    renderer.setPixelRatio(
-        Math.min(
-            window.devicePixelRatio,
-            isMobile ? 1.25 : 1.75
+    spiralGeometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(
+            spiralPositions,
+            3
         )
     );
 
 
-    if (
-        galaxyMaterial.uniforms
-        .uPixelRatio
-    ) {
-
-        galaxyMaterial
-            .uniforms
-            .uPixelRatio
-            .value =
-            renderer.getPixelRatio();
-
-    }
-
-}
+    spiralGeometry.setAttribute(
+        "color",
+        new THREE.BufferAttribute(
+            spiralColors,
+            3
+        )
+    );
 
 
-window.addEventListener(
-    "resize",
-    resize
-);
+    const spiralMaterial =
+        new THREE.PointsMaterial({
+
+            size:
+                isMobile
+                    ? 0.07
+                    : 0.095,
+
+            vertexColors: true,
+
+            transparent: true,
+
+            opacity: 0.45,
+
+            depthWrite: false,
+
+            blending:
+                THREE.AdditiveBlending
+        });
 
 
-/* =====================================================
-   VISIBILITY OPTIMIZATION
-===================================================== */
+    const spiral =
+        new THREE.Points(
+            spiralGeometry,
+            spiralMaterial
+        );
 
-document.addEventListener(
-    "visibilitychange",
-    () => {
 
-        if (
-            document.hidden
-        ) {
+    galaxy.add(spiral);
 
-            renderer.setAnimationLoop(
-                null
-            );
 
-        } else {
+    /* =====================================================
+       MOUSE / TOUCH PARALLAX
+    ===================================================== */
 
-            renderer.setAnimationLoop(
-                animate
-            );
+    let targetMouseX = 0;
+    let targetMouseY = 0;
 
+    let currentMouseX = 0;
+    let currentMouseY = 0;
+
+
+    window.addEventListener(
+        "pointermove",
+        (event) => {
+
+            targetMouseX =
+                (event.clientX /
+                    window.innerWidth -
+                    0.5);
+
+            targetMouseY =
+                (event.clientY /
+                    window.innerHeight -
+                    0.5);
+        },
+        {
+            passive: true
         }
+    );
 
+
+    /* =====================================================
+       ANIMATION
+    ===================================================== */
+
+    const clock =
+        new THREE.Clock();
+
+
+    function animate() {
+
+        requestAnimationFrame(
+            animate
+        );
+
+
+        const elapsed =
+            clock.getElapsedTime();
+
+
+        /* ---------------------------------------------
+           SMOOTH MOUSE
+        --------------------------------------------- */
+
+        currentMouseX +=
+            (
+                targetMouseX -
+                currentMouseX
+            ) * 0.035;
+
+
+        currentMouseY +=
+            (
+                targetMouseY -
+                currentMouseY
+            ) * 0.035;
+
+
+        /* ---------------------------------------------
+           GALAXY ROTATION
+        --------------------------------------------- */
+
+        stars.rotation.y =
+            elapsed * 0.006;
+
+
+        stars.rotation.x =
+            Math.sin(
+                elapsed * 0.08
+            ) * 0.015;
+
+
+        nebula.rotation.y =
+            -elapsed * 0.008;
+
+
+        spiral.rotation.y =
+            elapsed * 0.018;
+
+
+        spiral.rotation.x =
+            Math.sin(
+                elapsed * 0.12
+            ) * 0.025;
+
+
+        /* ---------------------------------------------
+           CORE FLOAT
+        --------------------------------------------- */
+
+        coreGroup.position.y =
+            Math.sin(
+                elapsed * 0.45
+            ) * 0.12;
+
+
+        coreGroup.rotation.y =
+            elapsed * 0.12;
+
+
+        core.rotation.y =
+            elapsed * 0.2;
+
+
+        glow.scale.setScalar(
+            1 +
+            Math.sin(
+                elapsed * 1.5
+            ) * 0.04
+        );
+
+
+        /* ---------------------------------------------
+           ORBITS
+        --------------------------------------------- */
+
+        orbitOne.rotation.z =
+            elapsed * 0.55;
+
+
+        orbitTwo.rotation.z =
+            -elapsed * 0.42;
+
+
+        orbitThree.rotation.z =
+            elapsed * 0.28;
+
+
+        /* ---------------------------------------------
+           ORBIT PARTICLES
+        --------------------------------------------- */
+
+        orbitParticles.forEach(
+            (particle) => {
+
+                const data =
+                    particle.userData;
+
+
+                data.angle +=
+                    data.speed *
+                    0.01;
+
+
+                particle.position.x =
+                    Math.cos(
+                        data.angle
+                    ) *
+                    data.radius;
+
+
+                particle.position.z =
+                    Math.sin(
+                        data.angle
+                    ) *
+                    data.radius;
+
+
+                particle.position.y =
+                    data.height +
+                    Math.sin(
+                        elapsed +
+                        data.angle
+                    ) *
+                    0.12;
+            }
+        );
+
+
+        /* ---------------------------------------------
+           PARALLAX
+        --------------------------------------------- */
+
+        galaxy.rotation.y +=
+            (
+                currentMouseX * 0.035 -
+                galaxy.rotation.y
+            ) * 0.008;
+
+
+        galaxy.rotation.x +=
+            (
+                currentMouseY * 0.025 -
+                galaxy.rotation.x
+            ) * 0.008;
+
+
+        camera.position.x +=
+            (
+                currentMouseX * 0.8 -
+                camera.position.x
+            ) * 0.025;
+
+
+        camera.position.y +=
+            (
+                -currentMouseY * 0.5 -
+                camera.position.y
+            ) * 0.025;
+
+
+        camera.lookAt(
+            0,
+            0,
+            0
+        );
+
+
+        /* ---------------------------------------------
+           RENDER
+        --------------------------------------------- */
+
+        renderer.render(
+            scene,
+            camera
+        );
     }
-);
 
 
-} // END CANVAS CHECK
+    animate();
+
+
+    /* =====================================================
+       RESIZE
+    ===================================================== */
+
+    window.addEventListener(
+        "resize",
+        () => {
+
+            camera.aspect =
+                window.innerWidth /
+                window.innerHeight;
+
+
+            camera.updateProjectionMatrix();
+
+
+            renderer.setPixelRatio(
+                Math.min(
+                    window.devicePixelRatio,
+                    window.innerWidth < 700
+                        ? 1.35
+                        : 1.8
+                )
+            );
+
+
+            renderer.setSize(
+                window.innerWidth,
+                window.innerHeight
+            );
+        }
+    );
+
+
+    /* =====================================================
+       CLEANUP WHEN PAGE IS HIDDEN
+       Helps reduce mobile CPU usage.
+    ===================================================== */
+
+    document.addEventListener(
+        "visibilitychange",
+        () => {
+
+            if (
+                document.hidden
+            ) {
+
+                renderer.setAnimationLoop(
+                    null
+                );
+
+            } else {
+
+                renderer.setAnimationLoop(
+                    animate
+                );
+            }
+        }
+    );
+
+           }
