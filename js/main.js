@@ -1,188 +1,433 @@
-/* =========================================
-   PORTFOLIO — MAIN JAVASCRIPT
-========================================= */
+/* =====================================================
+   RAJ PATHAK — PORTFOLIO
+   MAIN JAVASCRIPT
+===================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
 
-    /* =====================================
-       LOADER
-    ====================================== */
+/* =====================================================
+   PAGE LOADER
+===================================================== */
 
-    const loader = document.getElementById("loader");
-    const loaderLine = document.querySelector(".loader-line span");
-    const loaderPercent = document.querySelector(".loader-percent");
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-    let progress = 0;
+        document.body.classList.add(
+            "loading"
+        );
 
-    const loading = setInterval(() => {
 
-        progress += Math.random() * 8;
+        const loader =
+            document.getElementById(
+                "loader"
+            );
 
-        if (progress >= 100) {
+        const progressBar =
+            document.querySelector(
+                ".loader-progress-bar"
+            );
 
-            progress = 100;
+        const percent =
+            document.getElementById(
+                "loader-percent"
+            );
 
-            clearInterval(loading);
 
-            setTimeout(() => {
+        let progress = 0;
 
-                loader.classList.add("hidden");
 
-            }, 500);
+        const loading =
+            setInterval(
+                () => {
+
+                    progress +=
+                        Math.random() * 7;
+
+
+                    if (
+                        progress >= 100
+                    ) {
+
+                        progress = 100;
+
+                        clearInterval(
+                            loading
+                        );
+
+
+                        setTimeout(
+                            () => {
+
+                                loader.classList.add(
+                                    "hidden"
+                                );
+
+                                document.body.classList.remove(
+                                    "loading"
+                                );
+
+                            },
+                            450
+                        );
+
+                    }
+
+
+                    progressBar.style.width =
+                        `${progress}%`;
+
+
+                    percent.textContent =
+                        `${Math.floor(progress)
+                            .toString()
+                            .padStart(3, "0")}%`;
+
+                },
+                70
+            );
+
+    }
+);
+
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+const navbar =
+    document.querySelector(
+        ".navbar"
+    );
+
+
+function updateNavbar() {
+
+    if (
+        window.scrollY > 60
+    ) {
+
+        navbar.classList.add(
+            "scrolled"
+        );
+
+    } else {
+
+        navbar.classList.remove(
+            "scrolled"
+        );
+
+    }
+
+}
+
+
+window.addEventListener(
+    "scroll",
+    updateNavbar,
+    {
+        passive: true
+    }
+);
+
+
+updateNavbar();
+
+
+/* =====================================================
+   CUSTOM CURSOR
+===================================================== */
+
+const cursorDot =
+    document.querySelector(
+        ".cursor-dot"
+    );
+
+const cursorRing =
+    document.querySelector(
+        ".cursor-ring"
+    );
+
+
+const desktopPointer =
+    window.matchMedia(
+        "(pointer:fine)"
+    );
+
+
+if (
+    desktopPointer.matches
+) {
+
+    let mouseX =
+        window.innerWidth / 2;
+
+    let mouseY =
+        window.innerHeight / 2;
+
+
+    let ringX = mouseX;
+
+    let ringY = mouseY;
+
+
+    window.addEventListener(
+        "mousemove",
+        (event) => {
+
+            mouseX =
+                event.clientX;
+
+            mouseY =
+                event.clientY;
+
+
+            cursorDot.style.left =
+                `${mouseX}px`;
+
+            cursorDot.style.top =
+                `${mouseY}px`;
+
         }
-
-        loaderLine.style.width = `${progress}%`;
-
-        loaderPercent.textContent =
-            `${Math.floor(progress).toString().padStart(3, "0")}%`;
-
-    }, 70);
+    );
 
 
-    /* =====================================
-       CUSTOM CURSOR
-    ====================================== */
+    function cursorAnimation() {
 
-    const cursor = document.querySelector(".cursor");
-    const follower = document.querySelector(".cursor-follower");
-
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-
-    let followerX = mouseX;
-    let followerY = mouseY;
-
-    if (window.matchMedia("(pointer:fine)").matches) {
-
-        window.addEventListener("mousemove", (event) => {
-
-            mouseX = event.clientX;
-            mouseY = event.clientY;
-
-            cursor.style.left = `${mouseX}px`;
-            cursor.style.top = `${mouseY}px`;
-
-        });
-
-        function animateCursor() {
-
-            followerX += (mouseX - followerX) * 0.12;
-            followerY += (mouseY - followerY) * 0.12;
-
-            follower.style.left = `${followerX}px`;
-            follower.style.top = `${followerY}px`;
-
-            requestAnimationFrame(animateCursor);
-        }
-
-        animateCursor();
+        ringX +=
+            (
+                mouseX -
+                ringX
+            ) * 0.12;
 
 
-        document
-            .querySelectorAll("a, .project, .skills-grid div")
-            .forEach(element => {
+        ringY +=
+            (
+                mouseY -
+                ringY
+            ) * 0.12;
 
-                element.addEventListener("mouseenter", () => {
 
-                    follower.style.width = "55px";
-                    follower.style.height = "55px";
+        cursorRing.style.left =
+            `${ringX}px`;
 
-                });
+        cursorRing.style.top =
+            `${ringY}px`;
 
-                element.addEventListener("mouseleave", () => {
 
-                    follower.style.width = "34px";
-                    follower.style.height = "34px";
-
-                });
-
-            });
+        requestAnimationFrame(
+            cursorAnimation
+        );
 
     }
 
 
-    /* =====================================
-       NAVIGATION BACKGROUND
-    ====================================== */
+    cursorAnimation();
 
-    const navbar = document.querySelector(".navbar");
 
-    window.addEventListener("scroll", () => {
+    const interactiveElements =
+        document.querySelectorAll(
+            "a, .project-card, .skill"
+        );
 
-        if (window.scrollY > 60) {
 
-            navbar.style.background =
-                "rgba(5,5,5,0.65)";
+    interactiveElements.forEach(
+        (element) => {
 
-            navbar.style.backdropFilter =
-                "blur(18px)";
+            element.addEventListener(
+                "mouseenter",
+                () => {
 
-            navbar.style.padding =
-                "18px 5vw";
+                    cursorRing.classList.add(
+                        "active"
+                    );
 
-        } else {
+                }
+            );
 
-            navbar.style.background =
-                "transparent";
 
-            navbar.style.backdropFilter =
-                "none";
+            element.addEventListener(
+                "mouseleave",
+                () => {
 
-            navbar.style.padding =
-                "28px 5vw";
+                    cursorRing.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
 
         }
+    );
 
-    });
+}
 
 
-    /* =====================================
-       PROJECT TILT
-    ====================================== */
+/* =====================================================
+   PROJECT 3D TILT
+===================================================== */
 
-    const projects =
-        document.querySelectorAll(".project");
+const projectCards =
+    document.querySelectorAll(
+        ".project-card"
+    );
 
-    projects.forEach(project => {
 
-        project.addEventListener("mousemove", (event) => {
+if (
+    desktopPointer.matches
+) {
 
-            const rect =
-                project.getBoundingClientRect();
+    projectCards.forEach(
+        (card) => {
 
-            const x =
-                event.clientX - rect.left;
+            const visual =
+                card.querySelector(
+                    ".project-visual"
+                );
 
-            const y =
-                event.clientY - rect.top;
 
-            const rotateY =
-                ((x / rect.width) - 0.5) * 5;
+            card.addEventListener(
+                "mousemove",
+                (event) => {
 
-            const rotateX =
-                ((y / rect.height) - 0.5) * -5;
+                    const rect =
+                        card.getBoundingClientRect();
 
-            const image =
-                project.querySelector(".project-image");
 
-            image.style.transform =
-                `perspective(900px)
-                 rotateX(${rotateX}deg)
-                 rotateY(${rotateY}deg)
-                 scale(1.02)`;
+                    const x =
+                        event.clientX -
+                        rect.left;
 
-        });
 
-        project.addEventListener("mouseleave", () => {
+                    const y =
+                        event.clientY -
+                        rect.top;
 
-            const image =
-                project.querySelector(".project-image");
 
-            image.style.transform =
-                "perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)";
+                    const rotateY =
+                        (
+                            x /
+                            rect.width -
+                            0.5
+                        ) * 5;
 
-        });
 
-    });
+                    const rotateX =
+                        (
+                            y /
+                            rect.height -
+                            0.5
+                        ) * -5;
 
-});
+
+                    visual.style.transform =
+                        `
+                        perspective(1000px)
+                        rotateX(${rotateX}deg)
+                        rotateY(${rotateY}deg)
+                        translateY(-6px)
+                        scale(1.015)
+                        `;
+
+                }
+            );
+
+
+            card.addEventListener(
+                "mouseleave",
+                () => {
+
+                    visual.style.transform =
+                        "";
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   SMOOTH ANCHOR NAVIGATION
+===================================================== */
+
+document
+    .querySelectorAll(
+        'a[href^="#"]'
+    )
+    .forEach(
+        (link) => {
+
+            link.addEventListener(
+                "click",
+                (event) => {
+
+                    const targetID =
+                        link.getAttribute(
+                            "href"
+                        );
+
+
+                    if (
+                        targetID === "#"
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    const target =
+                        document.querySelector(
+                            targetID
+                        );
+
+
+                    if (
+                        !target
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    event.preventDefault();
+
+
+                    target.scrollIntoView(
+                        {
+                            behavior:
+                                "smooth"
+                        }
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+/* =====================================================
+   MOBILE VIEWPORT FIX
+===================================================== */
+
+function updateViewportHeight() {
+
+    document.documentElement.style.setProperty(
+        "--vh",
+        `${window.innerHeight * 0.01}px`
+    );
+
+}
+
+
+updateViewportHeight();
+
+
+window.addEventListener(
+    "resize",
+    updateViewportHeight
+);
