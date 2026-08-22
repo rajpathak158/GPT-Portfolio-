@@ -1,65 +1,62 @@
-/* =========================================================
-   RAJ PATHAK — IMMERSIVE 3D PORTFOLIO
-   STEP 3
-   OPTIMIZED GALAXY + 3D ENVIRONMENT
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
-   Designed for:
-   Desktop
-   Laptop
-   Android
-   GitHub Pages
+/*
+=========================================================
+RAJ PATHAK PORTFOLIO
+3D GALAXY ENGINE
+STEP 5
 
-   No external models.
-   No large textures.
-   GPU-friendly particles.
-========================================================= */
+Features:
+- Colorful galaxy
+- GPU-friendly particles
+- Nebula layers
+- Depth
+- Mouse parallax
+- Slow cinematic movement
+- Mobile performance optimization
+- Responsive canvas
+=========================================================
+*/
 
-import * as THREE from
-    "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
-
-/* =========================================================
+/* =====================================================
    CANVAS
-========================================================= */
+===================================================== */
 
 const canvas = document.getElementById("webgl");
 
 if (!canvas) {
-    throw new Error("WebGL canvas #webgl was not found.");
-}
+    console.warn("Galaxy canvas #webgl not found.");
+} else {
 
 
-/* =========================================================
-   DEVICE PERFORMANCE PROFILE
-========================================================= */
+/* =====================================================
+   DEVICE / PERFORMANCE
+===================================================== */
 
-const mobile =
-    window.innerWidth <= 800;
+const isMobile =
+    window.matchMedia("(max-width: 700px)").matches;
 
-const lowPower =
-    mobile ||
+const isLowPower =
+    navigator.hardwareConcurrency &&
     navigator.hardwareConcurrency <= 4;
-
-const pixelRatio =
-    Math.min(
-        window.devicePixelRatio || 1,
-        mobile ? 1.25 : 1.5
-    );
 
 
 /*
-    IMPORTANT:
+ * Reduce particle count on phones.
+ */
 
-    We deliberately cap pixel ratio.
+const PARTICLE_COUNT =
+    isMobile
+        ? 7000
+        : isLowPower
+            ? 9000
+            : 16000;
 
-    A phone with DPR 3 can otherwise make WebGL
-    render roughly 9x as many pixels.
-*/
 
-
-/* =========================================================
+/* =====================================================
    SCENE
-========================================================= */
+===================================================== */
 
 const scene = new THREE.Scene();
 
@@ -67,44 +64,45 @@ scene.background =
     new THREE.Color(0x02010a);
 
 
-/* =========================================================
+/* =====================================================
    CAMERA
-========================================================= */
+===================================================== */
 
 const camera =
     new THREE.PerspectiveCamera(
-        48,
+        55,
         window.innerWidth /
-            window.innerHeight,
+        window.innerHeight,
         0.1,
-        100
+        250
     );
 
 camera.position.set(
     0,
-    0.8,
-    9
+    2,
+    24
 );
 
 
-/* =========================================================
+/* =====================================================
    RENDERER
-========================================================= */
+===================================================== */
 
 const renderer =
     new THREE.WebGLRenderer({
-
         canvas,
-
-        antialias:
-            !lowPower,
-
-        alpha: true,
-
-        powerPreference:
-            "high-performance"
-
+        antialias: !isMobile,
+        alpha: false,
+        powerPreference: "high-performance"
     });
+
+
+renderer.setPixelRatio(
+    Math.min(
+        window.devicePixelRatio,
+        isMobile ? 1.25 : 1.75
+    )
+);
 
 
 renderer.setSize(
@@ -112,350 +110,234 @@ renderer.setSize(
     window.innerHeight
 );
 
-renderer.setPixelRatio(
-    pixelRatio
-);
 
 renderer.outputColorSpace =
     THREE.SRGBColorSpace;
 
-renderer.toneMapping =
-    THREE.ACESFilmicToneMapping;
 
-renderer.toneMappingExposure =
-    1.15;
-
-
-/* =========================================================
-   FOG
-========================================================= */
-
-scene.fog =
-    new THREE.FogExp2(
-        0x050214,
-        mobile
-            ? 0.035
-            : 0.025
-    );
-
-
-/* =========================================================
-   LIGHTING
-========================================================= */
-
-const ambient =
-    new THREE.AmbientLight(
-        0x6875ff,
-        0.22
-    );
-
-scene.add(ambient);
-
-
-/* Blue light */
-
-const blueLight =
-    new THREE.PointLight(
-        0x3b6dff,
-        mobile ? 5 : 10,
-        20
-    );
-
-blueLight.position.set(
-    -5,
-    2,
-    4
-);
-
-scene.add(blueLight);
-
-
-/* Purple light */
-
-const purpleLight =
-    new THREE.PointLight(
-        0xa53cff,
-        mobile ? 4 : 8,
-        18
-    );
-
-purpleLight.position.set(
-    5,
-    -1,
-    2
-);
-
-scene.add(purpleLight);
-
-
-/* Warm light */
-
-const goldLight =
-    new THREE.PointLight(
-        0xff9a42,
-        mobile ? 2 : 5,
-        15
-    );
-
-goldLight.position.set(
-    0,
-    3,
-    4
-);
-
-scene.add(goldLight);
-
-
-/* =========================================================
-   WORLD
-========================================================= */
-
-const world =
-    new THREE.Group();
-
-scene.add(world);
-
-
-/* =========================================================
-   GALAXY
-========================================================= */
+/* =====================================================
+   GALAXY GROUP
+===================================================== */
 
 const galaxy =
     new THREE.Group();
 
-galaxy.rotation.x =
-    Math.PI * 0.18;
-
-galaxy.rotation.z =
-    -0.12;
-
 scene.add(galaxy);
 
 
-/* =========================================================
+/* =====================================================
    GALAXY PARTICLES
-========================================================= */
+===================================================== */
 
-const galaxyCount =
-    mobile
-        ? 18000
-        : lowPower
-            ? 24000
-            : 38000;
-
-
-const galaxyPositions =
+const positions =
     new Float32Array(
-        galaxyCount * 3
+        PARTICLE_COUNT * 3
+    );
+
+const colors =
+    new Float32Array(
+        PARTICLE_COUNT * 3
+    );
+
+const sizes =
+    new Float32Array(
+        PARTICLE_COUNT
     );
 
 
-const galaxyColors =
-    new Float32Array(
-        galaxyCount * 3
-    );
-
-
-/*
-   Galaxy palette:
-
-   Blue
-   Violet
-   Pink
-   Cyan
-   Gold
-*/
-
+/* =====================================================
+   COLOR PALETTE
+===================================================== */
 
 const palette = [
 
-    new THREE.Color(0x4f7cff),
+    new THREE.Color(0x6c5ce7),
 
-    new THREE.Color(0x8b5cff),
+    new THREE.Color(0x00c6ff),
 
-    new THREE.Color(0xd84cff),
+    new THREE.Color(0x8b5cf6),
 
-    new THREE.Color(0x4fdfff),
+    new THREE.Color(0xff4ecd),
 
-    new THREE.Color(0xffb35c)
+    new THREE.Color(0x4facfe),
+
+    new THREE.Color(0xffffff)
 
 ];
 
 
+/* =====================================================
+   GALAXY SETTINGS
+===================================================== */
+
+const galaxyRadius =
+    isMobile ? 17 : 22;
+
+const galaxyDepth =
+    isMobile ? 3.5 : 5;
+
+const arms = 4;
+
+const armTwist = 2.8;
+
+
+/* =====================================================
+   CREATE GALAXY
+===================================================== */
+
 for (
     let i = 0;
-    i < galaxyCount;
+    i < PARTICLE_COUNT;
     i++
 ) {
 
+    const i3 = i * 3;
+
+
     /*
-        Normalized position
-    */
+     * Distance from center.
+     */
 
     const radius =
-        Math.random();
+        Math.pow(
+            Math.random(),
+            0.65
+        ) * galaxyRadius;
 
 
     /*
-        Spiral arms
-    */
-
-    const arms = 5;
+     * Which spiral arm?
+     */
 
     const arm =
         i % arms;
 
 
-    const baseAngle =
-        (
-            arm /
-            arms
-        ) *
+    const armAngle =
+        (arm / arms) *
         Math.PI *
         2;
 
 
-    const rotation =
+    /*
+     * Spiral rotation.
+     */
+
+    const spin =
         radius *
-        Math.PI *
-        5.5;
+        armTwist;
 
 
-    const randomAngle =
+    /*
+     * Random spread.
+     */
+
+    const spread =
+        (Math.random() - 0.5) *
         (
-            Math.random() -
-            0.5
-        ) *
-        (
-            0.55 +
-            radius * 0.35
+            0.35 +
+            radius * 0.035
         );
 
 
     const angle =
-        baseAngle +
-        rotation +
-        randomAngle;
+        armAngle +
+        spin +
+        spread;
 
 
     /*
-        Galaxy width
-
-        Wider near the outside,
-        tight near the center.
-    */
-
-    const spread =
-        (
-            0.04 +
-            radius * 0.32
-        );
-
-
-    const distance =
-        radius * 7.5;
-
-
-    const x =
-        Math.cos(angle) *
-        distance;
-
-
-    const z =
-        Math.sin(angle) *
-        distance;
-
-
-    /*
-        Thin galaxy disk
-    */
+     * Slight vertical depth.
+     */
 
     const y =
         (
             Math.random() -
             0.5
         ) *
-        spread;
-
-
-    const index =
-        i * 3;
-
-
-    galaxyPositions[index] =
-        x;
-
-    galaxyPositions[index + 1] =
-        y;
-
-    galaxyPositions[index + 2] =
-        z;
+        galaxyDepth *
+        (
+            1 -
+            radius /
+            galaxyRadius *
+            0.35
+        );
 
 
     /*
-        Color based on radius
-    */
+     * Position.
+     */
 
-    let color;
+    positions[i3] =
+        Math.cos(angle) *
+        radius;
 
+    positions[i3 + 1] =
+        y;
+
+    positions[i3 + 2] =
+        Math.sin(angle) *
+        radius;
+
+
+    /*
+     * Color based on distance.
+     */
+
+    const colorIndex =
+        Math.floor(
+            Math.random() *
+            palette.length
+        );
+
+
+    const color =
+        palette[colorIndex].clone();
+
+
+    /*
+     * Slightly desaturate
+     * some distant stars.
+     */
 
     if (
-        radius < 0.16
+        radius >
+        galaxyRadius * 0.7
     ) {
 
-        color =
-            palette[4];
-
-    } else if (
-        radius < 0.35
-    ) {
-
-        color =
-            palette[
-                Math.floor(
-                    Math.random() * 3
-                )
-            ];
-
-    } else {
-
-        color =
-            palette[
-                Math.floor(
-                    Math.random() *
-                    palette.length
-                )
-            ];
+        color.lerp(
+            new THREE.Color(0x3a3470),
+            0.35
+        );
 
     }
 
 
+    colors[i3] =
+        color.r;
+
+    colors[i3 + 1] =
+        color.g;
+
+    colors[i3 + 2] =
+        color.b;
+
+
     /*
-        Slight random brightness
-    */
+     * Particle size.
+     */
 
-    const brightness =
-        THREE.MathUtils.randFloat(
-            0.55,
-            1.0
-        );
-
-
-    galaxyColors[index] =
-        color.r * brightness;
-
-    galaxyColors[index + 1] =
-        color.g * brightness;
-
-    galaxyColors[index + 2] =
-        color.b * brightness;
+    sizes[i] =
+        0.5 +
+        Math.random() *
+        1.7;
 
 }
 
 
-/* =========================================================
-   GALAXY GEOMETRY
-========================================================= */
+/* =====================================================
+   PARTICLE GEOMETRY
+===================================================== */
 
 const galaxyGeometry =
     new THREE.BufferGeometry();
@@ -464,7 +346,7 @@ const galaxyGeometry =
 galaxyGeometry.setAttribute(
     "position",
     new THREE.BufferAttribute(
-        galaxyPositions,
+        positions,
         3
     )
 );
@@ -473,15 +355,97 @@ galaxyGeometry.setAttribute(
 galaxyGeometry.setAttribute(
     "color",
     new THREE.BufferAttribute(
-        galaxyColors,
+        colors,
         3
     )
 );
 
 
-/* =========================================================
-   GALAXY SHADER
-========================================================= */
+galaxyGeometry.setAttribute(
+    "size",
+    new THREE.BufferAttribute(
+        sizes,
+        1
+    )
+);
+
+
+/* =====================================================
+   PARTICLE TEXTURE
+===================================================== */
+
+function createParticleTexture() {
+
+    const size = 64;
+
+    const particleCanvas =
+        document.createElement("canvas");
+
+    particleCanvas.width = size;
+    particleCanvas.height = size;
+
+
+    const context =
+        particleCanvas.getContext("2d");
+
+
+    const gradient =
+        context.createRadialGradient(
+            size / 2,
+            size / 2,
+            0,
+            size / 2,
+            size / 2,
+            size / 2
+        );
+
+
+    gradient.addColorStop(
+        0,
+        "rgba(255,255,255,1)"
+    );
+
+    gradient.addColorStop(
+        0.15,
+        "rgba(255,255,255,0.95)"
+    );
+
+    gradient.addColorStop(
+        0.45,
+        "rgba(255,255,255,0.35)"
+    );
+
+    gradient.addColorStop(
+        1,
+        "rgba(255,255,255,0)"
+    );
+
+
+    context.fillStyle =
+        gradient;
+
+    context.fillRect(
+        0,
+        0,
+        size,
+        size
+    );
+
+
+    return new THREE.CanvasTexture(
+        particleCanvas
+    );
+
+}
+
+
+const particleTexture =
+    createParticleTexture();
+
+
+/* =====================================================
+   PARTICLE SHADER
+===================================================== */
 
 const galaxyMaterial =
     new THREE.ShaderMaterial({
@@ -490,12 +454,17 @@ const galaxyMaterial =
 
         depthWrite: false,
 
-        vertexColors: true,
-
         blending:
             THREE.AdditiveBlending,
 
+        vertexColors: true,
+
         uniforms: {
+
+            uPixelRatio: {
+                value:
+                    renderer.getPixelRatio()
+            },
 
             uTime: {
                 value: 0
@@ -503,51 +472,49 @@ const galaxyMaterial =
 
         },
 
+
         vertexShader: `
 
-            uniform float uTime;
-
-            attribute vec3 color;
+            attribute float size;
 
             varying vec3 vColor;
+
+            uniform float uPixelRatio;
+
+            uniform float uTime;
 
             void main() {
 
                 vColor = color;
 
-                vec3 p = position;
-
-                /*
-                    Very subtle vertical movement.
-                */
-
-                p.y +=
-                    sin(
-                        p.x * 0.35 +
-                        uTime * 0.15
-                    ) *
-                    0.025;
-
                 vec4 mvPosition =
                     modelViewMatrix *
-                    vec4(
-                        p,
-                        1.0
-                    );
+                    vec4(position, 1.0);
+
+
+                float depth =
+                    -mvPosition.z;
+
+
+                float pulse =
+                    1.0 +
+                    sin(
+                        uTime * 1.2 +
+                        position.x *
+                        0.35
+                    ) * 0.08;
+
 
                 gl_PointSize =
-                    1.8 *
-                    (
-                        300.0 /
-                        -mvPosition.z
+                    size *
+                    uPixelRatio *
+                    7.0 *
+                    pulse /
+                    max(
+                        depth * 0.045,
+                        0.45
                     );
 
-                gl_PointSize =
-                    clamp(
-                        gl_PointSize,
-                        0.6,
-                        3.2
-                    );
 
                 gl_Position =
                     projectionMatrix *
@@ -557,28 +524,25 @@ const galaxyMaterial =
 
         `,
 
+
         fragmentShader: `
+
+            uniform sampler2D uTexture;
 
             varying vec3 vColor;
 
             void main() {
 
-                vec2 uv =
-                    gl_PointCoord -
-                    0.5;
-
-                float d =
-                    length(uv);
-
                 float alpha =
-                    1.0 -
-                    smoothstep(
-                        0.05,
-                        0.5,
-                        d
-                    );
+                    texture2D(
+                        uTexture,
+                        gl_PointCoord
+                    ).a;
 
-                alpha *= 0.82;
+
+                if(alpha < 0.02)
+                    discard;
+
 
                 gl_FragColor =
                     vec4(
@@ -593,7 +557,20 @@ const galaxyMaterial =
     });
 
 
-const galaxyPoints =
+/*
+ * Add texture uniform after material creation.
+ */
+
+galaxyMaterial.uniforms.uTexture = {
+    value: particleTexture
+};
+
+
+/* =====================================================
+   GALAXY MESH
+===================================================== */
+
+const galaxyParticles =
     new THREE.Points(
         galaxyGeometry,
         galaxyMaterial
@@ -601,142 +578,201 @@ const galaxyPoints =
 
 
 galaxy.add(
-    galaxyPoints
+    galaxyParticles
 );
 
 
-/* =========================================================
-   GALAXY CORE GLOW
-========================================================= */
+/* =====================================================
+   CORE GLOW
+===================================================== */
 
-const glowGeometry =
+const coreGeometry =
     new THREE.SphereGeometry(
-        1.0,
-        mobile ? 16 : 24,
-        mobile ? 16 : 24
+        isMobile ? 2.0 : 2.5,
+        32,
+        32
     );
 
 
-const glowMaterial =
-    new THREE.ShaderMaterial({
-
+const coreMaterial =
+    new THREE.MeshBasicMaterial({
+        color: 0x8b5cf6,
         transparent: true,
-
-        depthWrite: false,
-
+        opacity: 0.18,
         blending:
             THREE.AdditiveBlending,
-
-        uniforms: {
-
-            uColor: {
-                value:
-                    new THREE.Color(
-                        0xff9b4a
-                    )
-            },
-
-            uTime: {
-                value: 0
-            }
-
-        },
-
-        vertexShader: `
-
-            varying vec3 vNormal;
-
-            void main() {
-
-                vNormal =
-                    normalize(
-                        normalMatrix *
-                        normal
-                    );
-
-                gl_Position =
-                    projectionMatrix *
-                    modelViewMatrix *
-                    vec4(
-                        position,
-                        1.0
-                    );
-
-            }
-
-        `,
-
-        fragmentShader: `
-
-            uniform vec3 uColor;
-
-            uniform float uTime;
-
-            varying vec3 vNormal;
-
-            void main() {
-
-                float intensity =
-                    pow(
-                        0.75 -
-                        dot(
-                            vNormal,
-                            vec3(
-                                0.0,
-                                0.0,
-                                1.0
-                            )
-                        ),
-                        2.0
-                    );
-
-                float pulse =
-                    0.9 +
-                    sin(
-                        uTime * 1.5
-                    ) *
-                    0.08;
-
-                gl_FragColor =
-                    vec4(
-                        uColor,
-                        intensity *
-                        pulse *
-                        0.8
-                    );
-
-            }
-
-        `
-
+        depthWrite: false
     });
 
 
-const galaxyGlow =
+const core =
     new THREE.Mesh(
-        glowGeometry,
-        glowMaterial
+        coreGeometry,
+        coreMaterial
     );
 
 
-galaxyGlow.scale.set(
-    1.5,
-    0.6,
-    1.5
-);
+galaxy.add(core);
+
+
+/* =====================================================
+   INNER CORE
+===================================================== */
+
+const innerCoreGeometry =
+    new THREE.SphereGeometry(
+        isMobile ? 0.7 : 0.9,
+        24,
+        24
+    );
+
+
+const innerCoreMaterial =
+    new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.7,
+        blending:
+            THREE.AdditiveBlending
+    });
+
+
+const innerCore =
+    new THREE.Mesh(
+        innerCoreGeometry,
+        innerCoreMaterial
+    );
 
 
 galaxy.add(
-    galaxyGlow
+    innerCore
 );
 
 
-/* =========================================================
+/* =====================================================
+   NEBULA CLOUDS
+===================================================== */
+
+function createNebula(
+    color,
+    position,
+    scale,
+    opacity
+) {
+
+    const geometry =
+        new THREE.SphereGeometry(
+            1,
+            24,
+            24
+        );
+
+
+    const material =
+        new THREE.MeshBasicMaterial({
+
+            color,
+
+            transparent: true,
+
+            opacity,
+
+            blending:
+                THREE.AdditiveBlending,
+
+            depthWrite: false
+
+        });
+
+
+    const mesh =
+        new THREE.Mesh(
+            geometry,
+            material
+        );
+
+
+    mesh.position.copy(
+        position
+    );
+
+
+    mesh.scale.set(
+        scale.x,
+        scale.y,
+        scale.z
+    );
+
+
+    galaxy.add(mesh);
+
+
+    return mesh;
+
+}
+
+
+/* =====================================================
+   COLORFUL NEBULA
+===================================================== */
+
+const nebulaOne =
+    createNebula(
+        0x304cff,
+        new THREE.Vector3(
+            -8,
+            1,
+            -4
+        ),
+        new THREE.Vector3(
+            9,
+            3,
+            5
+        ),
+        0.035
+    );
+
+
+const nebulaTwo =
+    createNebula(
+        0xd72fff,
+        new THREE.Vector3(
+            7,
+            -1,
+            1
+        ),
+        new THREE.Vector3(
+            8,
+            3,
+            5
+        ),
+        0.03
+    );
+
+
+const nebulaThree =
+    createNebula(
+        0x00d9ff,
+        new THREE.Vector3(
+            1,
+            3,
+            -7
+        ),
+        new THREE.Vector3(
+            7,
+            2.5,
+            4
+        ),
+        0.025
+    );
+
+
+/* =====================================================
    STAR FIELD
-========================================================= */
+===================================================== */
 
 const starCount =
-    mobile
+    isMobile
         ? 900
         : 1800;
 
@@ -753,47 +789,59 @@ for (
     i++
 ) {
 
-    const index =
+    const i3 =
         i * 3;
 
 
     const radius =
-        THREE.MathUtils.randFloat(
-            10,
-            35
-        );
+        35 +
+        Math.random() *
+        70;
 
 
-    const angle =
+    const theta =
         Math.random() *
         Math.PI *
         2;
 
 
-    starPositions[index] =
-        Math.cos(angle) *
-        radius;
-
-
-    starPositions[index + 1] =
-        THREE.MathUtils.randFloat(
-            -16,
-            16
+    const phi =
+        Math.acos(
+            2 *
+            Math.random()
+            -
+            1
         );
 
 
-    starPositions[index + 2] =
-        Math.sin(angle) *
-        radius;
+    starPositions[i3] =
+        radius *
+        Math.sin(phi) *
+        Math.cos(theta);
+
+
+    starPositions[i3 + 1] =
+        radius *
+        Math.cos(phi);
+
+
+    starPositions[i3 + 2] =
+        radius *
+        Math.sin(phi) *
+        Math.sin(theta);
 
 }
 
 
-const starsGeometry =
+/* =====================================================
+   STAR GEOMETRY
+===================================================== */
+
+const starGeometry =
     new THREE.BufferGeometry();
 
 
-starsGeometry.setAttribute(
+starGeometry.setAttribute(
     "position",
     new THREE.BufferAttribute(
         starPositions,
@@ -802,498 +850,63 @@ starsGeometry.setAttribute(
 );
 
 
-const starsMaterial =
+/* =====================================================
+   STAR MATERIAL
+===================================================== */
+
+const starMaterial =
     new THREE.PointsMaterial({
 
         color: 0xffffff,
 
         size:
-            mobile
-                ? 0.025
-                : 0.035,
+            isMobile
+                ? 0.09
+                : 0.12,
 
         transparent: true,
 
-        opacity: 0.65,
+        opacity: 0.7,
 
-        depthWrite: false
+        depthWrite: false,
+
+        blending:
+            THREE.AdditiveBlending
 
     });
 
 
 const stars =
     new THREE.Points(
-        starsGeometry,
-        starsMaterial
+        starGeometry,
+        starMaterial
     );
 
 
-scene.add(
-    stars
-);
+scene.add(stars);
 
 
-/* =========================================================
-   3D CENTRAL STRUCTURE
-========================================================= */
+/* =====================================================
+   MOUSE
+===================================================== */
 
-const structure =
-    new THREE.Group();
-
-
-structure.position.set(
-    0,
-    0.1,
-    0
-);
-
-
-world.add(
-    structure
-);
-
-
-/* =========================================================
-   MATERIALS
-========================================================= */
-
-const metal =
-    new THREE.MeshStandardMaterial({
-
-        color: 0x303848,
-
-        metalness: 0.88,
-
-        roughness: 0.22
-
-    });
-
-
-const silver =
-    new THREE.MeshStandardMaterial({
-
-        color: 0xcbd5ff,
-
-        metalness: 0.9,
-
-        roughness: 0.18
-
-    });
-
-
-const crystal =
-    new THREE.MeshPhysicalMaterial({
-
-        color: 0x536dff,
-
-        metalness: 0.15,
-
-        roughness: 0.08,
-
-        transmission:
-            mobile ? 0.15 : 0.45,
-
-        transparent: true,
-
-        opacity:
-            mobile ? 0.7 : 0.55
-
-    });
-
-
-/* =========================================================
-   MAIN CRYSTAL
-========================================================= */
-
-const crystalGeometry =
-    new THREE.IcosahedronGeometry(
-        1.25,
-        mobile ? 1 : 2
-    );
-
-
-const crystalMesh =
-    new THREE.Mesh(
-        crystalGeometry,
-        crystal
-    );
-
-
-structure.add(
-    crystalMesh
-);
-
-
-/* =========================================================
-   INNER ENERGY CORE
-========================================================= */
-
-const energyGeometry =
-    new THREE.IcosahedronGeometry(
-        0.55,
-        2
-    );
-
-
-const energyMaterial =
-    new THREE.MeshBasicMaterial({
-
-        color: 0xff75e6
-
-    });
-
-
-const energyCore =
-    new THREE.Mesh(
-        energyGeometry,
-        energyMaterial
-    );
-
-
-structure.add(
-    energyCore
-);
-
-
-/* =========================================================
-   CRYSTAL WIREFRAME
-========================================================= */
-
-const wireGeometry =
-    new THREE.IcosahedronGeometry(
-        1.4,
-        mobile ? 1 : 2
-    );
-
-
-const wireMaterial =
-    new THREE.MeshBasicMaterial({
-
-        color: 0x66baff,
-
-        wireframe: true,
-
-        transparent: true,
-
-        opacity: 0.32
-
-    });
-
-
-const wire =
-    new THREE.Mesh(
-        wireGeometry,
-        wireMaterial
-    );
-
-
-structure.add(
-    wire
-);
-
-
-/* =========================================================
-   ORBIT RINGS
-========================================================= */
-
-const rings =
-    new THREE.Group();
-
-
-structure.add(
-    rings
-);
-
-
-const ringCount =
-    mobile ? 3 : 4;
-
-
-for (
-    let i = 0;
-    i < ringCount;
-    i++
-) {
-
-    const ringGeometry =
-        new THREE.TorusGeometry(
-            1.7 +
-                i * 0.38,
-
-            0.012,
-
-            6,
-
-            96
-        );
-
-
-    const ringMaterial =
-        new THREE.MeshBasicMaterial({
-
-            color:
-                i % 2 === 0
-                    ? 0x5e8cff
-                    : 0xd46cff,
-
-            transparent: true,
-
-            opacity: 0.7
-
-        });
-
-
-    const ring =
-        new THREE.Mesh(
-            ringGeometry,
-            ringMaterial
-        );
-
-
-    ring.rotation.x =
-        Math.PI / 2;
-
-
-    ring.rotation.z =
-        i * 0.55;
-
-
-    rings.add(
-        ring
-    );
-
-}
-
-
-/* =========================================================
-   ENERGY LINES
-========================================================= */
-
-const energyLines =
-    new THREE.Group();
-
-
-structure.add(
-    energyLines
-);
-
-
-for (
-    let i = 0;
-    i < 8;
-    i++
-) {
-
-    const points = [];
-
-
-    const angle =
-        (
-            i /
-            8
-        ) *
-        Math.PI *
-        2;
-
-
-    for (
-        let j = 0;
-        j < 12;
-        j++
-    ) {
-
-        const radius =
-            1.4 +
-            j * 0.12;
-
-
-        points.push(
-            new THREE.Vector3(
-                Math.cos(angle) *
-                    radius,
-
-                Math.sin(
-                    j * 0.7
-                ) *
-                    0.15,
-
-                Math.sin(angle) *
-                    radius
-            )
-        );
-
-    }
-
-
-    const geometry =
-        new THREE.BufferGeometry()
-            .setFromPoints(
-                points
-            );
-
-
-    const material =
-        new THREE.LineBasicMaterial({
-
-            color:
-                i % 2
-                    ? 0xff65d9
-                    : 0x5ea7ff,
-
-            transparent: true,
-
-            opacity: 0.35
-
-        });
-
-
-    const line =
-        new THREE.Line(
-            geometry,
-            material
-        );
-
-
-    energyLines.add(
-        line
-    );
-
-}
-
-
-/* =========================================================
-   FLOATING OBJECTS
-========================================================= */
-
-const floating =
-    new THREE.Group();
-
-
-world.add(
-    floating
-);
-
-
-const floatingCount =
-    mobile ? 7 : 12;
-
-
-for (
-    let i = 0;
-    i < floatingCount;
-    i++
-) {
-
-    const size =
-        THREE.MathUtils.randFloat(
-            0.08,
-            0.25
-        );
-
-
-    const geometry =
-        new THREE.OctahedronGeometry(
-            size,
-            0
-        );
-
-
-    const material =
-        new THREE.MeshStandardMaterial({
-
-            color:
-                i % 3 === 0
-                    ? 0x597dff
-                    : i % 3 === 1
-                        ? 0xd456ff
-                        : 0xff9c55,
-
-            metalness: 0.8,
-
-            roughness: 0.25
-
-        });
-
-
-    const object =
-        new THREE.Mesh(
-            geometry,
-            material
-        );
-
-
-    object.position.set(
-
-        THREE.MathUtils.randFloatSpread(
-            8
-        ),
-
-        THREE.MathUtils.randFloat(
-            -3,
-            4
-        ),
-
-        THREE.MathUtils.randFloat(
-            -1,
-            4
-        )
-
-    );
-
-
-    object.userData = {
-
-        speed:
-            THREE.MathUtils.randFloat(
-                0.15,
-                0.45
-            ),
-
-        offset:
-            Math.random() *
-            Math.PI *
-            2,
-
-        baseY:
-            object.position.y
-
-    };
-
-
-    floating.add(
-        object
-    );
-
-}
-
-
-/* =========================================================
-   MOUSE / TOUCH
-========================================================= */
-
-const pointer = {
-
+const mouse = {
     x: 0,
-
     y: 0
-
 };
 
 
-const pointerTarget = {
-
+const targetMouse = {
     x: 0,
-
     y: 0
-
 };
 
 
 window.addEventListener(
-    "mousemove",
+    "pointermove",
     (event) => {
 
-        pointerTarget.x =
+        targetMouse.x =
             (
                 event.clientX /
                 window.innerWidth
@@ -1302,7 +915,7 @@ window.addEventListener(
             1;
 
 
-        pointerTarget.y =
+        targetMouse.y =
             -(
                 event.clientY /
                 window.innerHeight
@@ -1316,6 +929,10 @@ window.addEventListener(
     }
 );
 
+
+/* =====================================================
+   TOUCH
+===================================================== */
 
 window.addEventListener(
     "touchmove",
@@ -1332,7 +949,7 @@ window.addEventListener(
             event.touches[0];
 
 
-        pointerTarget.x =
+        targetMouse.x =
             (
                 touch.clientX /
                 window.innerWidth
@@ -1341,7 +958,7 @@ window.addEventListener(
             1;
 
 
-        pointerTarget.y =
+        targetMouse.y =
             -(
                 touch.clientY /
                 window.innerHeight
@@ -1356,39 +973,17 @@ window.addEventListener(
 );
 
 
-/* =========================================================
-   SCROLL
-========================================================= */
-
-let scrollAmount = 0;
-
-
-window.addEventListener(
-    "scroll",
-    () => {
-
-        scrollAmount =
-            window.scrollY /
-            window.innerHeight;
-
-    },
-    {
-        passive: true
-    }
-);
-
-
-/* =========================================================
+/* =====================================================
    CLOCK
-========================================================= */
+===================================================== */
 
 const clock =
     new THREE.Clock();
 
 
-/* =========================================================
+/* =====================================================
    ANIMATION
-========================================================= */
+===================================================== */
 
 function animate() {
 
@@ -1397,192 +992,167 @@ function animate() {
     );
 
 
-    const time =
+    const elapsed =
         clock.getElapsedTime();
 
 
-    /* ---------------------------------------
-       POINTER SMOOTHING
-    ---------------------------------------- */
+    /* =================================================
+       SMOOTH MOUSE
+    ================================================= */
 
-    pointer.x +=
+    mouse.x +=
         (
-            pointerTarget.x -
-            pointer.x
+            targetMouse.x -
+            mouse.x
         ) *
-        0.025;
+        0.035;
 
 
-    pointer.y +=
+    mouse.y +=
         (
-            pointerTarget.y -
-            pointer.y
+            targetMouse.y -
+            mouse.y
         ) *
-        0.025;
+        0.035;
 
 
-    /* ---------------------------------------
+
+    /* =================================================
        GALAXY ROTATION
-    ---------------------------------------- */
+    ================================================= */
 
     galaxy.rotation.y =
-        time * 0.018;
+        elapsed *
+        0.025;
 
 
     galaxy.rotation.x =
-        Math.PI * 0.18 +
         Math.sin(
-            time * 0.08
+            elapsed * 0.08
         ) *
-        0.025;
+        0.035;
 
 
-    galaxyMaterial.uniforms.uTime.value =
-        time;
+    /* =================================================
+       MOUSE PARALLAX
+    ================================================= */
+
+    galaxy.rotation.y +=
+        mouse.x *
+        0.08;
 
 
-    galaxyGlow.material.uniforms.uTime.value =
-        time;
+    galaxy.rotation.x +=
+        mouse.y *
+        0.035;
 
 
-    /* ---------------------------------------
-       STARS
-    ---------------------------------------- */
 
-    stars.rotation.y =
-        time * 0.003;
+    /* =================================================
+       CORE PULSE
+    ================================================= */
 
-
-    /* ---------------------------------------
-       CENTRAL STRUCTURE
-    ---------------------------------------- */
-
-    structure.rotation.y =
-        time * 0.09 +
-        pointer.x * 0.25;
-
-
-    structure.rotation.x =
+    const pulse =
+        1 +
         Math.sin(
-            time * 0.25
+            elapsed * 1.5
         ) *
-        0.06 +
-        pointer.y * 0.12;
+        0.08;
 
 
-    /* ---------------------------------------
-       CRYSTAL
-    ---------------------------------------- */
-
-    crystalMesh.rotation.x =
-        time * 0.15;
-
-
-    crystalMesh.rotation.y =
-        time * 0.2;
-
-
-    energyCore.rotation.x =
-        -time * 0.35;
-
-
-    energyCore.rotation.y =
-        time * 0.25;
-
-
-    wire.rotation.x =
-        -time * 0.1;
-
-
-    wire.rotation.y =
-        time * 0.12;
-
-
-    /* ---------------------------------------
-       RINGS
-    ---------------------------------------- */
-
-    rings.rotation.y =
-        time * 0.14;
-
-
-    rings.rotation.x =
-        Math.sin(
-            time * 0.3
-        ) *
-        0.15;
-
-
-    /* ---------------------------------------
-       ENERGY LINES
-    ---------------------------------------- */
-
-    energyLines.rotation.y =
-        -time * 0.18;
-
-
-    /* ---------------------------------------
-       FLOATING OBJECTS
-    ---------------------------------------- */
-
-    floating.children.forEach(
-        (object) => {
-
-            object.rotation.x +=
-                0.003;
-
-            object.rotation.y +=
-                0.004;
-
-
-            object.position.y =
-                object.userData.baseY +
-                Math.sin(
-                    time *
-                    object.userData.speed +
-                    object.userData.offset
-                ) *
-                0.18;
-
-        }
+    core.scale.setScalar(
+        pulse
     );
 
 
-    /* ---------------------------------------
+    innerCore.scale.setScalar(
+        1 +
+        Math.sin(
+            elapsed * 2.0
+        ) *
+        0.06
+    );
+
+
+
+    /* =================================================
+       NEBULA MOTION
+    ================================================= */
+
+    nebulaOne.rotation.y =
+        elapsed *
+        0.025;
+
+
+    nebulaTwo.rotation.y =
+        -elapsed *
+        0.018;
+
+
+    nebulaThree.rotation.y =
+        elapsed *
+        0.015;
+
+
+
+    /* =================================================
+       STARS
+    ================================================= */
+
+    stars.rotation.y =
+        elapsed *
+        0.003;
+
+
+    stars.rotation.x =
+        Math.sin(
+            elapsed * 0.04
+        ) *
+        0.015;
+
+
+
+    /* =================================================
+       SHADER TIME
+    ================================================= */
+
+    galaxyMaterial
+        .uniforms
+        .uTime
+        .value =
+        elapsed;
+
+
+
+    /* =================================================
        CAMERA
-    ---------------------------------------- */
+    ================================================= */
 
-    const cameraTargetX =
-        pointer.x * 0.65;
+    const targetCameraX =
+        mouse.x *
+        1.2;
 
 
-    const cameraTargetY =
-        0.8 +
-        pointer.y * 0.35;
+    const targetCameraY =
+        2 +
+        mouse.y *
+        0.7;
 
 
     camera.position.x +=
         (
-            cameraTargetX -
+            targetCameraX -
             camera.position.x
         ) *
-        0.018;
+        0.015;
 
 
     camera.position.y +=
         (
-            cameraTargetY -
+            targetCameraY -
             camera.position.y
         ) *
-        0.018;
-
-
-    camera.position.z =
-        9 -
-        Math.min(
-            scrollAmount * 1.15,
-            2.7
-        );
+        0.015;
 
 
     camera.lookAt(
@@ -1592,49 +1162,10 @@ function animate() {
     );
 
 
-    /* ---------------------------------------
-       LIGHT ANIMATION
-    ---------------------------------------- */
 
-    blueLight.position.x =
-        Math.sin(
-            time * 0.35
-        ) *
-        5;
-
-
-    blueLight.position.z =
-        Math.cos(
-            time * 0.35
-        ) *
-        5;
-
-
-    purpleLight.position.x =
-        Math.cos(
-            time * 0.28
-        ) *
-        5;
-
-
-    purpleLight.position.z =
-        Math.sin(
-            time * 0.28
-        ) *
-        4;
-
-
-    goldLight.position.y =
-        2.5 +
-        Math.sin(
-            time * 0.5
-        ) *
-        0.8;
-
-
-    /* ---------------------------------------
+    /* =================================================
        RENDER
-    ---------------------------------------- */
+    ================================================= */
 
     renderer.render(
         scene,
@@ -1644,50 +1175,95 @@ function animate() {
 }
 
 
-/* =========================================================
+/* =====================================================
+   START
+===================================================== */
+
+animate();
+
+
+/* =====================================================
    RESIZE
-========================================================= */
+===================================================== */
+
+function resize() {
+
+    const width =
+        window.innerWidth;
+
+    const height =
+        window.innerHeight;
+
+
+    camera.aspect =
+        width / height;
+
+
+    camera.updateProjectionMatrix();
+
+
+    renderer.setSize(
+        width,
+        height
+    );
+
+
+    renderer.setPixelRatio(
+        Math.min(
+            window.devicePixelRatio,
+            isMobile ? 1.25 : 1.75
+        )
+    );
+
+
+    if (
+        galaxyMaterial.uniforms
+        .uPixelRatio
+    ) {
+
+        galaxyMaterial
+            .uniforms
+            .uPixelRatio
+            .value =
+            renderer.getPixelRatio();
+
+    }
+
+}
+
 
 window.addEventListener(
     "resize",
+    resize
+);
+
+
+/* =====================================================
+   VISIBILITY OPTIMIZATION
+===================================================== */
+
+document.addEventListener(
+    "visibilitychange",
     () => {
 
-        camera.aspect =
-            window.innerWidth /
-            window.innerHeight;
+        if (
+            document.hidden
+        ) {
 
+            renderer.setAnimationLoop(
+                null
+            );
 
-        camera.updateProjectionMatrix();
+        } else {
 
+            renderer.setAnimationLoop(
+                animate
+            );
 
-        renderer.setSize(
-            window.innerWidth,
-            window.innerHeight
-        );
+        }
 
-
-        const newMobile =
-            window.innerWidth <= 800;
-
-
-        renderer.setPixelRatio(
-            Math.min(
-                window.devicePixelRatio || 1,
-                newMobile
-                    ? 1.25
-                    : 1.5
-            )
-        );
-
-    },
-    {
-        passive: true
     }
 );
 
 
-/* =========================================================
-   START
-========================================================= */
-
-animate();
+} // END CANVAS CHECK
