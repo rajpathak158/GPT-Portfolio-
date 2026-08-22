@@ -1,173 +1,386 @@
 /* =====================================================
-   RAJ PATHAK — PORTFOLIO
-   MAIN JAVASCRIPT
+   RAJ PATHAK
+   STEP 4
+   CINEMATIC INTRO ENGINE
 ===================================================== */
 
 
 /* =====================================================
-   PAGE LOADER
+   ELEMENTS
 ===================================================== */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+const intro =
+    document.getElementById("intro");
 
-        document.body.classList.add(
-            "loading"
-        );
+const introVideo =
+    document.getElementById("introVideo");
 
+const enterButton =
+    document.getElementById("enterButton");
 
-        const loader =
-            document.getElementById(
-                "loader"
-            );
+const introHint =
+    document.getElementById("introHint");
 
-        const progressBar =
-            document.querySelector(
-                ".loader-progress-bar"
-            );
+const loader =
+    document.getElementById("loader");
 
-        const percent =
-            document.getElementById(
-                "loader-percent"
-            );
-
-
-        let progress = 0;
-
-
-        const loading =
-            setInterval(
-                () => {
-
-                    progress +=
-                        Math.random() * 7;
-
-
-                    if (
-                        progress >= 100
-                    ) {
-
-                        progress = 100;
-
-                        clearInterval(
-                            loading
-                        );
-
-
-                        setTimeout(
-                            () => {
-
-                                loader.classList.add(
-                                    "hidden"
-                                );
-
-                                document.body.classList.remove(
-                                    "loading"
-                                );
-
-                            },
-                            450
-                        );
-
-                    }
-
-
-                    progressBar.style.width =
-                        `${progress}%`;
-
-
-                    percent.textContent =
-                        `${Math.floor(progress)
-                            .toString()
-                            .padStart(3, "0")}%`;
-
-                },
-                70
-            );
-
-    }
-);
-
-
-/* =====================================================
-   NAVBAR
-===================================================== */
+const loaderProgress =
+    document.getElementById("loaderProgress");
 
 const navbar =
-    document.querySelector(
-        ".navbar"
+    document.querySelector(".navbar");
+
+const cursorDot =
+    document.querySelector(".cursor-dot");
+
+const cursorRing =
+    document.querySelector(".cursor-ring");
+
+
+/* =====================================================
+   INTRO STATE
+===================================================== */
+
+let experienceStarted = false;
+
+
+/* =====================================================
+   VIDEO PREPARATION
+===================================================== */
+
+if (introVideo) {
+
+    introVideo.muted = true;
+
+    introVideo.setAttribute(
+        "playsinline",
+        ""
     );
 
-
-function updateNavbar() {
-
-    if (
-        window.scrollY > 60
-    ) {
-
-        navbar.classList.add(
-            "scrolled"
-        );
-
-    } else {
-
-        navbar.classList.remove(
-            "scrolled"
-        );
-
-    }
+    introVideo.setAttribute(
+        "webkit-playsinline",
+        ""
+    );
 
 }
 
 
+/* =====================================================
+   ENTER EXPERIENCE
+===================================================== */
+
+async function startExperience() {
+
+    if (experienceStarted) {
+        return;
+    }
+
+    experienceStarted = true;
+
+
+    if (enterButton) {
+
+        enterButton.style.pointerEvents =
+            "none";
+
+        enterButton.style.opacity =
+            "0.5";
+
+    }
+
+
+    if (introHint) {
+
+        introHint.textContent =
+            "ENTERING EXPERIENCE...";
+
+    }
+
+
+    /*
+     * Start video.
+     *
+     * The click gives the browser
+     * permission to start media.
+     */
+
+    if (introVideo) {
+
+        try {
+
+            /*
+             * Start muted first.
+             */
+
+            introVideo.muted = true;
+
+            await introVideo.play();
+
+
+            /*
+             * Now try to enable audio.
+             *
+             * Some browsers permit this because
+             * the entire action came from a click.
+             */
+
+            try {
+
+                introVideo.muted = false;
+
+            } catch (error) {
+
+                console.log(
+                    "Audio permission handled by browser."
+                );
+
+            }
+
+
+            intro.classList.add(
+                "playing"
+            );
+
+
+            /*
+             * If browser still keeps it muted,
+             * update the hint.
+             */
+
+            setTimeout(() => {
+
+                if (
+                    introVideo.muted &&
+                    introHint
+                ) {
+
+                    introHint.textContent =
+                        "TAP TO ENABLE SOUND";
+
+                }
+
+            }, 700);
+
+        }
+
+        catch (error) {
+
+            console.warn(
+                "Video could not autoplay:",
+                error
+            );
+
+            /*
+             * Even if video fails,
+             * continue to the portfolio.
+             */
+
+            finishIntro();
+
+            return;
+
+        }
+
+    }
+
+
+    /*
+     * Give the intro video time to play.
+     *
+     * Change this value depending on
+     * your introduction video length.
+     */
+
+    const INTRO_DURATION = 6500;
+
+
+    setTimeout(
+        finishIntro,
+        INTRO_DURATION
+    );
+
+}
+
+
+/* =====================================================
+   FINISH INTRO
+===================================================== */
+
+function finishIntro() {
+
+    if (!intro) {
+        return;
+    }
+
+
+    /*
+     * Start transition.
+     */
+
+    intro.classList.add(
+        "exit"
+    );
+
+
+    /*
+     * Unlock scrolling.
+     */
+
+    document.body.classList.remove(
+        "intro-active"
+    );
+
+
+    /*
+     * Stop video after transition.
+     */
+
+    setTimeout(() => {
+
+        if (introVideo) {
+
+            try {
+
+                introVideo.pause();
+
+            }
+
+            catch (error) {}
+
+        }
+
+        intro.remove();
+
+    }, 1300);
+
+}
+
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+if (enterButton) {
+
+    enterButton.addEventListener(
+        "click",
+        startExperience
+    );
+
+}
+
+
+/* =====================================================
+   OPTIONAL:
+   CLICK INTRO VIDEO TO ENABLE AUDIO
+===================================================== */
+
+if (introVideo) {
+
+    introVideo.addEventListener(
+        "click",
+        async () => {
+
+            if (
+                experienceStarted &&
+                introVideo.muted
+            ) {
+
+                try {
+
+                    introVideo.muted = false;
+
+                    await introVideo.play();
+
+                    if (introHint) {
+
+                        introHint.textContent =
+                            "SOUND ON · IMMERSIVE EXPERIENCE";
+
+                    }
+
+                }
+
+                catch (error) {
+
+                    console.log(
+                        "Browser blocked audio."
+                    );
+
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   NAVBAR SCROLL
+===================================================== */
+
+let lastScroll =
+    0;
+
+
 window.addEventListener(
     "scroll",
-    updateNavbar,
+    () => {
+
+        const scrollY =
+            window.scrollY;
+
+
+        if (navbar) {
+
+            if (scrollY > 40) {
+
+                navbar.classList.add(
+                    "scrolled"
+                );
+
+            }
+
+            else {
+
+                navbar.classList.remove(
+                    "scrolled"
+                );
+
+            }
+
+        }
+
+
+        lastScroll =
+            scrollY;
+
+    },
     {
         passive: true
     }
 );
 
 
-updateNavbar();
-
-
 /* =====================================================
    CUSTOM CURSOR
 ===================================================== */
 
-const cursorDot =
-    document.querySelector(
-        ".cursor-dot"
-    );
-
-const cursorRing =
-    document.querySelector(
-        ".cursor-ring"
-    );
-
-
-const desktopPointer =
-    window.matchMedia(
-        "(pointer:fine)"
-    );
-
-
 if (
-    desktopPointer.matches
+    cursorDot &&
+    cursorRing &&
+    window.matchMedia(
+        "(pointer: fine)"
+    ).matches
 ) {
 
-    let mouseX =
-        window.innerWidth / 2;
+    let mouseX = 0;
+    let mouseY = 0;
 
-    let mouseY =
-        window.innerHeight / 2;
-
-
-    let ringX = mouseX;
-
-    let ringY = mouseY;
+    let ringX = 0;
+    let ringY = 0;
 
 
     window.addEventListener(
@@ -180,31 +393,34 @@ if (
             mouseY =
                 event.clientY;
 
-
-            cursorDot.style.left =
-                `${mouseX}px`;
-
-            cursorDot.style.top =
-                `${mouseY}px`;
-
+        },
+        {
+            passive: true
         }
     );
 
 
-    function cursorAnimation() {
+    function updateCursor() {
+
+        cursorDot.style.left =
+            `${mouseX}px`;
+
+        cursorDot.style.top =
+            `${mouseY}px`;
+
 
         ringX +=
             (
                 mouseX -
                 ringX
-            ) * 0.12;
+            ) * 0.13;
 
 
         ringY +=
             (
                 mouseY -
                 ringY
-            ) * 0.12;
+            ) * 0.13;
 
 
         cursorRing.style.left =
@@ -215,18 +431,22 @@ if (
 
 
         requestAnimationFrame(
-            cursorAnimation
+            updateCursor
         );
 
     }
 
 
-    cursorAnimation();
+    updateCursor();
 
+
+    /*
+     * Cursor interaction
+     */
 
     const interactiveElements =
         document.querySelectorAll(
-            "a, .project-card, .skill"
+            "a, button, .project-card, .skill"
         );
 
 
@@ -263,80 +483,59 @@ if (
 
 
 /* =====================================================
-   PROJECT 3D TILT
+   MAGNETIC BUTTONS
 ===================================================== */
 
-const projectCards =
+const magneticElements =
     document.querySelectorAll(
-        ".project-card"
+        ".magnetic"
     );
 
 
 if (
-    desktopPointer.matches
+    window.matchMedia(
+        "(pointer: fine)"
+    ).matches
 ) {
 
-    projectCards.forEach(
-        (card) => {
+    magneticElements.forEach(
+        (element) => {
 
-            const visual =
-                card.querySelector(
-                    ".project-visual"
-                );
-
-
-            card.addEventListener(
+            element.addEventListener(
                 "mousemove",
                 (event) => {
 
                     const rect =
-                        card.getBoundingClientRect();
+                        element.getBoundingClientRect();
 
 
                     const x =
                         event.clientX -
-                        rect.left;
+                        rect.left -
+                        rect.width / 2;
 
 
                     const y =
                         event.clientY -
-                        rect.top;
+                        rect.top -
+                        rect.height / 2;
 
 
-                    const rotateY =
-                        (
-                            x /
-                            rect.width -
-                            0.5
-                        ) * 5;
-
-
-                    const rotateX =
-                        (
-                            y /
-                            rect.height -
-                            0.5
-                        ) * -5;
-
-
-                    visual.style.transform =
-                        `
-                        perspective(1000px)
-                        rotateX(${rotateX}deg)
-                        rotateY(${rotateY}deg)
-                        translateY(-6px)
-                        scale(1.015)
-                        `;
+                    element.style.transform =
+                        `translate(
+                            ${x * 0.12}px,
+                            ${y * 0.12}px
+                        )`;
 
                 }
             );
 
 
-            card.addEventListener(
+            element.addEventListener(
                 "mouseleave",
                 () => {
 
-                    visual.style.transform =
+                    element.style.transform =
                         "";
 
                 }
@@ -349,85 +548,152 @@ if (
 
 
 /* =====================================================
-   SMOOTH ANCHOR NAVIGATION
+   SMOOTH INTERNAL LINKS
 ===================================================== */
 
-document
-    .querySelectorAll(
-        'a[href^="#"]'
-    )
-    .forEach(
-        (link) => {
+document.querySelectorAll(
+    'a[href^="#"]'
+).forEach(
+    (link) => {
 
-            link.addEventListener(
-                "click",
-                (event) => {
+        link.addEventListener(
+            "click",
+            (event) => {
 
-                    const targetID =
-                        link.getAttribute(
-                            "href"
-                        );
-
-
-                    if (
-                        targetID === "#"
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    const target =
-                        document.querySelector(
-                            targetID
-                        );
-
-
-                    if (
-                        !target
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    event.preventDefault();
-
-
-                    target.scrollIntoView(
-                        {
-                            behavior:
-                                "smooth"
-                        }
+                const targetId =
+                    link.getAttribute(
+                        "href"
                     );
 
-                }
-            );
 
-        }
-    );
+                if (
+                    !targetId ||
+                    targetId === "#"
+                ) {
+                    return;
+                }
+
+
+                const target =
+                    document.querySelector(
+                        targetId
+                    );
+
+
+                if (!target) {
+                    return;
+                }
+
+
+                event.preventDefault();
+
+
+                target.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+            }
+        );
+
+    }
+);
 
 
 /* =====================================================
-   MOBILE VIEWPORT FIX
+   PAGE LOAD PROGRESS
 ===================================================== */
 
-function updateViewportHeight() {
+window.addEventListener(
+    "load",
+    () => {
 
-    document.documentElement.style.setProperty(
-        "--vh",
-        `${window.innerHeight * 0.01}px`
+        let progress =
+            0;
+
+
+        const interval =
+            setInterval(
+                () => {
+
+                    progress +=
+                        Math.random() * 12;
+
+
+                    if (
+                        progress >= 100
+                    ) {
+
+                        progress =
+                            100;
+
+                        clearInterval(
+                            interval
+                        );
+
+                    }
+
+
+                    if (loaderProgress) {
+
+                        loaderProgress.style.width =
+                            `${progress}%`;
+
+                    }
+
+                },
+                60
+            );
+
+    }
+);
+
+
+/* =====================================================
+   VIDEO ERROR HANDLING
+===================================================== */
+
+if (introVideo) {
+
+    introVideo.addEventListener(
+        "error",
+        () => {
+
+            console.warn(
+                "intro.mp4 could not be loaded."
+            );
+
+
+            if (introHint) {
+
+                introHint.textContent =
+                    "WELCOME · ENTER EXPERIENCE";
+
+            }
+
+        }
     );
 
 }
 
 
-updateViewportHeight();
+/* =====================================================
+   VISIBILITY HANDLING
+===================================================== */
 
+document.addEventListener(
+    "visibilitychange",
+    () => {
 
-window.addEventListener(
-    "resize",
-    updateViewportHeight
+        if (
+            document.hidden &&
+            introVideo &&
+            !introVideo.paused
+        ) {
+
+            introVideo.pause();
+
+        }
+
+    }
 );
