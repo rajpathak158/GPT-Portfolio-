@@ -191,7 +191,7 @@ async function startExperience() {
      * your introduction video length.
      */
 
-    const INTRO_DURATION = 6500;
+    const INTRO_DURATION = 10000;
 
 
     setTimeout(
