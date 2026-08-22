@@ -12,26 +12,49 @@
 
     <meta
         name="theme-color"
-        content="#030303"
+        content="#02010a"
     >
 
     <meta
         name="description"
-        content="Raj Pathak — Creative Developer creating immersive digital experiences."
+        content="Raj Pathak — Creative Developer building immersive digital experiences, interactive websites and 3D experiences."
     >
 
-    <title>Raj Pathak — Creative Developer</title>
+    <meta
+        name="author"
+        content="Raj Pathak"
+    >
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>
+        Raj Pathak — Creative Developer
+    </title>
+
+
+    <!-- =================================================
+         GOOGLE FONTS
+    ================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
 
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
         rel="stylesheet"
     >
 
-    <!-- Main CSS -->
+
+    <!-- =================================================
+         MAIN CSS
+    ================================================== -->
+
     <link
         rel="stylesheet"
         href="./css/style.css"
@@ -42,35 +65,456 @@
 
 <body>
 
-    <!-- ======================================
-         PAGE LOADER
-    ======================================= -->
 
-    <div id="loader">
+<!-- =====================================================
+     PAGE LOADER
+====================================================== -->
 
-        <div class="loader-content">
+<div
+    id="loader"
+    aria-hidden="true"
+>
 
-            <div class="loader-logo">
+    <div class="loader-content">
+
+        <div class="loader-top">
+
+            <span class="loader-mark">
                 RP<span>.</span>
-            </div>
+            </span>
+
+            <span class="loader-label">
+                PORTFOLIO / 2026
+            </span>
+
+        </div>
+
+
+        <div class="loader-center">
 
             <div class="loader-title">
                 RAJ PATHAK
             </div>
 
-            <div class="loader-progress">
+            <div class="loader-subtitle">
+                CREATIVE DEVELOPER
+            </div>
 
-                <div class="loader-progress-bar"></div>
+        </div>
+
+
+        <div class="loader-progress">
+
+            <div
+                class="loader-progress-bar"
+            ></div>
+
+        </div>
+
+
+        <div class="loader-bottom">
+
+            <span>
+                INITIALIZING EXPERIENCE
+            </span>
+
+            <span id="loader-percent">
+                000%
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     CUSTOM CURSOR
+====================================================== -->
+
+<div
+    class="cursor-dot"
+    aria-hidden="true"
+></div>
+
+<div
+    class="cursor-ring"
+    aria-hidden="true"
+></div>
+
+
+
+<!-- =====================================================
+     NAVIGATION
+====================================================== -->
+
+<header class="navbar">
+
+    <a
+        href="#home"
+        class="logo magnetic"
+    >
+
+        RP<span>.</span>
+
+    </a>
+
+
+    <nav
+        class="desktop-nav"
+        aria-label="Main navigation"
+    >
+
+        <a
+            href="#home"
+            class="nav-link"
+        >
+            Home
+        </a>
+
+        <a
+            href="#about"
+            class="nav-link"
+        >
+            About
+        </a>
+
+        <a
+            href="#work"
+            class="nav-link"
+        >
+            Work
+        </a>
+
+        <a
+            href="#skills"
+            class="nav-link"
+        >
+            Skills
+        </a>
+
+        <a
+            href="#contact"
+            class="nav-link"
+        >
+            Contact
+        </a>
+
+    </nav>
+
+
+    <a
+        href="#contact"
+        class="nav-button magnetic"
+    >
+        Let's Talk
+    </a>
+
+</header>
+
+
+
+<!-- =====================================================
+     MAIN
+====================================================== -->
+
+<main>
+
+
+<!-- =====================================================
+     HERO
+====================================================== -->
+
+<section
+    id="home"
+    class="hero"
+>
+
+    <!-- Three.js canvas -->
+
+    <canvas
+        id="webgl"
+        aria-hidden="true"
+    ></canvas>
+
+
+    <!-- Atmospheric layers -->
+
+    <div
+        class="hero-vignette"
+        aria-hidden="true"
+    ></div>
+
+    <div
+        class="hero-gradient"
+        aria-hidden="true"
+    ></div>
+
+    <div
+        class="hero-scanlines"
+        aria-hidden="true"
+    ></div>
+
+    <div
+        class="hero-noise"
+        aria-hidden="true"
+    ></div>
+
+
+    <!-- Hero content -->
+
+    <div class="hero-content">
+
+
+        <div class="hero-kicker">
+
+            <span class="status-dot"></span>
+
+            <span>
+                AVAILABLE FOR CREATIVE PROJECTS
+            </span>
+
+        </div>
+
+
+        <h1 class="hero-title">
+
+            <span>
+                I BUILD
+            </span>
+
+            <span class="hero-title-dim">
+                DIGITAL
+            </span>
+
+            <span>
+                EXPERIENCES.
+            </span>
+
+        </h1>
+
+
+        <p class="hero-description">
+
+            Creative developer focused on
+            immersive websites, interactive
+            experiences, modern interfaces
+            and 3D web technology.
+
+        </p>
+
+
+        <div class="hero-actions">
+
+            <a
+                href="#work"
+                class="btn btn-primary magnetic"
+            >
+
+                <span>
+                    Explore Work
+                </span>
+
+                <span class="btn-arrow">
+                    ↗
+                </span>
+
+            </a>
+
+
+            <a
+                href="#about"
+                class="btn btn-outline magnetic"
+            >
+
+                About Me
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Hero side information -->
+
+    <div class="hero-side-info">
+
+        <span>
+            CREATIVE
+        </span>
+
+        <span>
+            DEVELOPMENT
+        </span>
+
+        <span>
+            / 3D / WEBGL
+        </span>
+
+    </div>
+
+
+
+    <!-- Hero footer -->
+
+    <div class="hero-footer">
+
+        <div class="hero-footer-item">
+            SCROLL TO EXPLORE
+        </div>
+
+
+        <div class="scroll-track">
+
+            <span></span>
+
+        </div>
+
+
+        <div class="hero-footer-item">
+            01 / 05
+        </div>
+
+    </div>
+
+
+    <!-- Scroll indicator -->
+
+    <div class="scroll-indicator">
+
+        <span class="scroll-indicator-line"></span>
+
+        <span>
+            SCROLL
+        </span>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     ABOUT
+====================================================== -->
+
+<section
+    id="about"
+    class="section about"
+>
+
+    <div class="section-background-glow"></div>
+
+
+    <div class="section-index">
+        01
+    </div>
+
+
+    <div class="section-header">
+
+        <div class="eyebrow">
+            ABOUT ME
+        </div>
+
+
+        <h2>
+
+            Turning ideas into
+            <span>
+                digital worlds.
+            </span>
+
+        </h2>
+
+    </div>
+
+
+    <div class="about-layout">
+
+
+        <div class="about-visual">
+
+            <div class="about-orbit">
+
+                <div class="about-orbit-ring ring-one"></div>
+
+                <div class="about-orbit-ring ring-two"></div>
+
+                <div class="about-orbit-core">
+                    RP
+                </div>
 
             </div>
 
-            <div class="loader-bottom">
+        </div>
 
-                <span>INITIALIZING</span>
 
-                <span id="loader-percent">
-                    000%
-                </span>
+        <div class="about-text">
+
+            <p class="large-text">
+
+                I'm Raj, a creative developer
+                interested in creating modern
+                digital experiences that combine
+                technology, design and motion.
+
+            </p>
+
+
+            <p>
+
+                My goal is to create websites that
+                aren't just pages on a screen —
+                but experiences people remember.
+
+            </p>
+
+
+            <div class="about-meta">
+
+
+                <div class="meta-item">
+
+                    <span>
+                        BASED IN
+                    </span>
+
+                    <strong>
+                        INDIA
+                    </strong>
+
+                </div>
+
+
+                <div class="meta-item">
+
+                    <span>
+                        FOCUS
+                    </span>
+
+                    <strong>
+                        DIGITAL EXPERIENCE
+                    </strong>
+
+                </div>
+
+
+                <div class="meta-item">
+
+                    <span>
+                        INTEREST
+                    </span>
+
+                    <strong>
+                        3D / WEBGL
+                    </strong>
+
+                </div>
 
             </div>
 
@@ -78,556 +522,564 @@
 
     </div>
 
-
-    <!-- ======================================
-         CUSTOM CURSOR
-    ======================================= -->
-
-    <div class="cursor-dot"></div>
-
-    <div class="cursor-ring"></div>
+</section>
 
 
-    <!-- ======================================
-         NAVIGATION
-    ======================================= -->
 
-    <header class="navbar">
+<!-- =====================================================
+     WORK
+====================================================== -->
 
-        <a
-            href="#home"
-            class="logo"
-        >
-            RP<span>.</span>
-        </a>
+<section
+    id="work"
+    class="section work"
+>
 
-
-        <nav class="desktop-nav">
-
-            <a href="#home">Home</a>
-
-            <a href="#about">About</a>
-
-            <a href="#work">Work</a>
-
-            <a href="#skills">Skills</a>
-
-            <a href="#contact">Contact</a>
-
-        </nav>
+    <div class="section-index">
+        02
+    </div>
 
 
-        <a
-            href="#contact"
-            class="nav-button"
-        >
-            Let's Talk
-        </a>
+    <div class="section-header">
 
-    </header>
+        <div class="eyebrow">
+            SELECTED WORK
+        </div>
 
 
-    <!-- ======================================
-         MAIN
-    ======================================= -->
+        <h2>
 
-    <main>
+            Things I've
+            <span>
+                built.
+            </span>
+
+        </h2>
+
+    </div>
 
 
-        <!-- ==================================
-             HERO
-        =================================== -->
+    <div class="projects">
 
-        <section
-            id="home"
-            class="hero"
+
+        <!-- PROJECT 01 -->
+
+        <article
+            class="project-card"
+            data-project="01"
         >
 
-            <!-- THREE.JS CANVAS -->
+            <div class="project-visual">
 
-            <canvas id="webgl"></canvas>
+                <div class="project-glow"></div>
 
-
-            <!-- Cinematic overlays -->
-
-            <div class="hero-vignette"></div>
-
-            <div class="hero-gradient"></div>
-
-            <div class="hero-noise"></div>
+                <div class="project-number">
+                    01
+                </div>
 
 
-            <!-- Hero content -->
+                <div class="project-orbit">
 
-            <div class="hero-content">
-
-                <div class="hero-kicker">
-
-                    <span class="status-dot"></span>
-
-                    CREATIVE DEVELOPER
+                    <div></div>
+                    <div></div>
+                    <div></div>
 
                 </div>
 
 
-                <h1 class="hero-title">
+                <div class="project-placeholder">
 
-                    <span>I BUILD</span>
+                    DIGITAL
+                    <br>
+                    EXPERIENCE
 
-                    <span class="dim">
-                        DIGITAL
+                </div>
+
+
+                <div class="project-corner">
+                    ↗
+                </div>
+
+            </div>
+
+
+            <div class="project-details">
+
+                <div>
+
+                    <span>
+                        WEB EXPERIENCE
                     </span>
 
-                    <span>EXPERIENCES.</span>
+                    <h3>
+                        Project One
+                    </h3>
 
-                </h1>
+                </div>
 
 
-                <p class="hero-description">
+                <p>
 
-                    I create immersive websites and
-                    interactive digital experiences
-                    combining design, technology and 3D.
+                    Immersive digital experience
+                    focused on interaction,
+                    animation and visual design.
 
                 </p>
 
-
-                <div class="hero-actions">
-
-                    <a
-                        href="#work"
-                        class="btn btn-primary"
-                    >
-                        Explore Work
-                    </a>
-
-                    <a
-                        href="#about"
-                        class="btn btn-outline"
-                    >
-                        About Me
-                    </a>
-
-                </div>
-
             </div>
 
-
-            <!-- Hero footer -->
-
-            <div class="hero-footer">
-
-                <div>
-                    SCROLL TO EXPLORE
-                </div>
-
-                <div class="scroll-track">
-
-                    <span></span>
-
-                </div>
-
-                <div>
-                    01 / 05
-                </div>
-
-            </div>
-
-        </section>
+        </article>
 
 
-        <!-- ==================================
-             ABOUT
-        =================================== -->
 
-        <section
-            id="about"
-            class="section about"
+        <!-- PROJECT 02 -->
+
+        <article
+            class="project-card"
+            data-project="02"
         >
 
-            <div class="section-index">
+            <div class="project-visual project-purple">
+
+                <div class="project-glow"></div>
+
+                <div class="project-number">
+                    02
+                </div>
+
+
+                <div class="project-orbit">
+
+                    <div></div>
+                    <div></div>
+                    <div></div>
+
+                </div>
+
+
+                <div class="project-placeholder">
+
+                    CREATIVE
+                    <br>
+                    DEVELOPMENT
+
+                </div>
+
+
+                <div class="project-corner">
+                    ↗
+                </div>
+
+            </div>
+
+
+            <div class="project-details">
+
+                <div>
+
+                    <span>
+                        CREATIVE DEVELOPMENT
+                    </span>
+
+                    <h3>
+                        Project Two
+                    </h3>
+
+                </div>
+
+
+                <p>
+
+                    Experimental interface
+                    combining motion, interaction
+                    and modern web technology.
+
+                </p>
+
+            </div>
+
+        </article>
+
+
+
+        <!-- PROJECT 03 -->
+
+        <article
+            class="project-card"
+            data-project="03"
+        >
+
+            <div class="project-visual project-gold">
+
+                <div class="project-glow"></div>
+
+                <div class="project-number">
+                    03
+                </div>
+
+
+                <div class="project-orbit">
+
+                    <div></div>
+                    <div></div>
+                    <div></div>
+
+                </div>
+
+
+                <div class="project-placeholder">
+
+                    THREE
+                    <br>
+                    DIMENSION
+
+                </div>
+
+
+                <div class="project-corner">
+                    ↗
+                </div>
+
+            </div>
+
+
+            <div class="project-details">
+
+                <div>
+
+                    <span>
+                        3D EXPERIENCE
+                    </span>
+
+                    <h3>
+                        Project Three
+                    </h3>
+
+                </div>
+
+
+                <p>
+
+                    Interactive 3D environment
+                    built for the modern web.
+
+                </p>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     SKILLS
+====================================================== -->
+
+<section
+    id="skills"
+    class="section skills"
+>
+
+    <div class="section-index">
+        03
+    </div>
+
+
+    <div class="section-header">
+
+        <div class="eyebrow">
+            TECHNOLOGY
+        </div>
+
+
+        <h2>
+
+            Tools I
+            <span>
+                work with.
+            </span>
+
+        </h2>
+
+    </div>
+
+
+    <div class="skills-grid">
+
+
+        <div class="skill">
+
+            <span>
                 01
-            </div>
+            </span>
+
+            <strong>
+                HTML
+            </strong>
+
+            <small>
+                STRUCTURE
+            </small>
+
+        </div>
 
 
-            <div class="section-header">
+        <div class="skill">
 
-                <div class="eyebrow">
-                    ABOUT ME
-                </div>
-
-                <h2>
-
-                    Turning ideas into
-                    <span>digital worlds.</span>
-
-                </h2>
-
-            </div>
-
-
-            <div class="about-layout">
-
-                <div class="about-spacer"></div>
-
-
-                <div class="about-text">
-
-                    <p>
-
-                        I'm Raj, a creative developer
-                        interested in building modern,
-                        interactive digital experiences.
-
-                    </p>
-
-
-                    <p>
-
-                        I combine design, animation,
-                        code and emerging technologies
-                        to create websites that feel
-                        alive.
-
-                    </p>
-
-
-                    <div class="about-meta">
-
-                        <div>
-
-                            <span>BASED IN</span>
-
-                            <strong>INDIA</strong>
-
-                        </div>
-
-
-                        <div>
-
-                            <span>FOCUS</span>
-
-                            <strong>
-                                DIGITAL EXPERIENCE
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ==================================
-             WORK
-        =================================== -->
-
-        <section
-            id="work"
-            class="section work"
-        >
-
-            <div class="section-index">
+            <span>
                 02
-            </div>
+            </span>
+
+            <strong>
+                CSS
+            </strong>
+
+            <small>
+                VISUAL SYSTEMS
+            </small>
+
+        </div>
 
 
-            <div class="section-header">
+        <div class="skill">
 
-                <div class="eyebrow">
-                    SELECTED WORK
-                </div>
-
-                <h2>
-
-                    Things I've
-                    <span>built.</span>
-
-                </h2>
-
-            </div>
-
-
-            <div class="projects">
-
-
-                <!-- PROJECT 01 -->
-
-                <article class="project-card">
-
-                    <div class="project-visual">
-
-                        <div class="project-number">
-                            01
-                        </div>
-
-                        <div class="project-placeholder">
-                            DIGITAL WORLD
-                        </div>
-
-                    </div>
-
-
-                    <div class="project-details">
-
-                        <div>
-
-                            <span>
-                                WEB EXPERIENCE
-                            </span>
-
-                            <h3>
-                                Project One
-                            </h3>
-
-                        </div>
-
-                        <p>
-                            Immersive digital experience
-                            with interactive motion.
-                        </p>
-
-                    </div>
-
-                </article>
-
-
-                <!-- PROJECT 02 -->
-
-                <article class="project-card">
-
-                    <div class="project-visual">
-
-                        <div class="project-number">
-                            02
-                        </div>
-
-                        <div class="project-placeholder">
-                            CREATIVE WEB
-                        </div>
-
-                    </div>
-
-
-                    <div class="project-details">
-
-                        <div>
-
-                            <span>
-                                CREATIVE DEVELOPMENT
-                            </span>
-
-                            <h3>
-                                Project Two
-                            </h3>
-
-                        </div>
-
-                        <p>
-                            Experimental interface
-                            focused on interaction.
-                        </p>
-
-                    </div>
-
-                </article>
-
-
-                <!-- PROJECT 03 -->
-
-                <article class="project-card">
-
-                    <div class="project-visual">
-
-                        <div class="project-number">
-                            03
-                        </div>
-
-                        <div class="project-placeholder">
-                            THREE DIMENSION
-                        </div>
-
-                    </div>
-
-
-                    <div class="project-details">
-
-                        <div>
-
-                            <span>
-                                3D EXPERIENCE
-                            </span>
-
-                            <h3>
-                                Project Three
-                            </h3>
-
-                        </div>
-
-                        <p>
-                            WebGL environment with
-                            interactive 3D elements.
-                        </p>
-
-                    </div>
-
-                </article>
-
-            </div>
-
-        </section>
-
-
-        <!-- ==================================
-             SKILLS
-        =================================== -->
-
-        <section
-            id="skills"
-            class="section skills"
-        >
-
-            <div class="section-index">
+            <span>
                 03
-            </div>
+            </span>
+
+            <strong>
+                JavaScript
+            </strong>
+
+            <small>
+                INTERACTION
+            </small>
+
+        </div>
 
 
-            <div class="section-header">
+        <div class="skill">
 
-                <div class="eyebrow">
-                    TECHNOLOGY
-                </div>
-
-                <h2>
-
-                    Tools I
-                    <span>work with.</span>
-
-                </h2>
-
-            </div>
-
-
-            <div class="skills-grid">
-
-                <div class="skill">
-                    <span>01</span>
-                    HTML
-                </div>
-
-                <div class="skill">
-                    <span>02</span>
-                    CSS
-                </div>
-
-                <div class="skill">
-                    <span>03</span>
-                    JavaScript
-                </div>
-
-                <div class="skill">
-                    <span>04</span>
-                    Three.js
-                </div>
-
-                <div class="skill">
-                    <span>05</span>
-                    GSAP
-                </div>
-
-                <div class="skill">
-                    <span>06</span>
-                    WebGL
-                </div>
-
-                <div class="skill">
-                    <span>07</span>
-                    GitHub
-                </div>
-
-                <div class="skill">
-                    <span>08</span>
-                    UI / UX
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ==================================
-             CONTACT
-        =================================== -->
-
-        <section
-            id="contact"
-            class="section contact"
-        >
-
-            <div class="section-index">
+            <span>
                 04
-            </div>
+            </span>
+
+            <strong>
+                Three.js
+            </strong>
+
+            <small>
+                3D WEB
+            </small>
+
+        </div>
 
 
-            <div class="eyebrow">
-                CONTACT
-            </div>
+        <div class="skill">
+
+            <span>
+                05
+            </span>
+
+            <strong>
+                GSAP
+            </strong>
+
+            <small>
+                MOTION
+            </small>
+
+        </div>
 
 
-            <h2>
+        <div class="skill">
 
-                Let's build
-                <span>something extraordinary.</span>
+            <span>
+                06
+            </span>
 
-            </h2>
+            <strong>
+                WebGL
+            </strong>
 
+            <small>
+                GRAPHICS
+            </small>
 
-            <a
-                href="mailto:your@email.com"
-                class="contact-email"
-            >
-                your@email.com
-            </a>
-
-
-            <div class="social-links">
-
-                <a href="#">
-                    GitHub
-                </a>
-
-                <a href="#">
-                    LinkedIn
-                </a>
-
-                <a href="#">
-                    Instagram
-                </a>
-
-            </div>
-
-        </section>
-
-    </main>
+        </div>
 
 
-    <!-- ======================================
-         JAVASCRIPT
-    ======================================= -->
+        <div class="skill">
 
-    <script
-        type="module"
-        src="./js/scene.js"
-    ></script>
+            <span>
+                07
+            </span>
 
-    <script
-        src="./js/main.js"
-    ></script>
+            <strong>
+                GitHub
+            </strong>
+
+            <small>
+                DEVELOPMENT
+            </small>
+
+        </div>
+
+
+        <div class="skill">
+
+            <span>
+                08
+            </span>
+
+            <strong>
+                UI / UX
+            </strong>
+
+            <small>
+                EXPERIENCE
+            </small>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CONTACT
+====================================================== -->
+
+<section
+    id="contact"
+    class="section contact"
+>
+
+    <div class="contact-background">
+
+        <div class="contact-orb"></div>
+
+    </div>
+
+
+    <div class="section-index">
+        04
+    </div>
+
+
+    <div class="eyebrow">
+        CONTACT
+    </div>
+
+
+    <h2>
+
+        Let's build
+        <span>
+            something extraordinary.
+        </span>
+
+    </h2>
+
+
+    <p class="contact-description">
+
+        Have an idea, project or digital
+        experience in mind?
+
+        Let's create something memorable.
+
+    </p>
+
+
+    <!-- CHANGE THIS EMAIL -->
+
+    <a
+        href="mailto:your@email.com"
+        class="contact-email magnetic"
+    >
+
+        your@email.com
+
+        <span>
+            ↗
+        </span>
+
+    </a>
+
+
+    <div class="social-links">
+
+        <!-- CHANGE THESE LINKS -->
+
+        <a
+            href="#"
+            target="_blank"
+            rel="noopener"
+        >
+            GitHub
+        </a>
+
+
+        <a
+            href="#"
+            target="_blank"
+            rel="noopener"
+        >
+            LinkedIn
+        </a>
+
+
+        <a
+            href="#"
+            target="_blank"
+            rel="noopener"
+        >
+            Instagram
+        </a>
+
+    </div>
+
+
+    <footer class="site-footer">
+
+        <span>
+            © 2026 RAJ PATHAK
+        </span>
+
+        <span>
+            BUILT WITH CODE & CURIOSITY
+        </span>
+
+    </footer>
+
+</section>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+<script
+    type="module"
+    src="./js/scene.js"
+></script>
+
+<script
+    src="./js/main.js"
+></script>
+
 
 </body>
 
-</html>
+                    </html>
