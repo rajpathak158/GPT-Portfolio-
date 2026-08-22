@@ -45,7 +45,7 @@
 
 
     <!-- =====================================================
-         CSS
+         MAIN CSS
     ====================================================== -->
 
     <link
@@ -74,7 +74,7 @@
         src="./gemini_generated_video_70c897fa.mp4"
         playsinline
         webkit-playsinline
-        preload="metadata"
+        preload="auto"
         muted
     ></video>
 
@@ -230,7 +230,7 @@
 
 
 <!-- =====================================================
-     NAVBAR
+     NAVIGATION
 ====================================================== -->
 
 <header class="navbar">
@@ -252,14 +252,12 @@
             Home
         </a>
 
-
         <a
             href="#about"
             class="nav-link"
         >
             About
         </a>
-
 
         <a
             href="#work"
@@ -268,14 +266,12 @@
             Work
         </a>
 
-
         <a
             href="#skills"
             class="nav-link"
         >
             Skills
         </a>
-
 
         <a
             href="#contact"
@@ -299,10 +295,11 @@
 
 
 <!-- =====================================================
-     MAIN
+     MAIN CONTENT
 ====================================================== -->
 
 <main id="mainContent">
+
 
 
 <!-- =====================================================
@@ -313,6 +310,8 @@
     id="home"
     class="hero"
 >
+
+    <!-- THREE.JS GALAXY -->
 
     <canvas
         id="webgl"
@@ -328,6 +327,8 @@
 
     <div class="hero-noise"></div>
 
+
+    <!-- HERO CONTENT -->
 
     <div class="hero-content">
 
@@ -348,11 +349,9 @@
                 I BUILD
             </span>
 
-
             <span class="hero-title-dim">
                 DIGITAL
             </span>
-
 
             <span>
                 EXPERIENCES.
@@ -401,6 +400,8 @@
     </div>
 
 
+    <!-- SIDE INFO -->
+
     <div class="hero-side-info">
 
         <span>
@@ -417,6 +418,8 @@
 
     </div>
 
+
+    <!-- HERO FOOTER -->
 
     <div class="hero-footer">
 
@@ -438,6 +441,8 @@
 
     </div>
 
+
+    <!-- SCROLL -->
 
     <div class="scroll-indicator">
 
@@ -493,6 +498,8 @@
     <div class="about-layout">
 
 
+        <!-- ABOUT VISUAL -->
+
         <div class="about-visual">
 
             <div class="about-orbit">
@@ -515,6 +522,8 @@
 
         </div>
 
+
+        <!-- ABOUT TEXT -->
 
         <div class="about-text">
 
@@ -578,6 +587,7 @@
 
                 </div>
 
+
             </div>
 
         </div>
@@ -589,7 +599,7 @@
 
 
 <!-- =====================================================
-     WORK — REAL PROJECTS
+     WORK — PROJECT WALL
 ====================================================== -->
 
 <section
@@ -611,22 +621,13 @@
 
         <h2>
 
-            Projects I've
+            Things I've
 
             <span>
                 built.
             </span>
 
         </h2>
-
-
-        <p class="section-intro">
-
-            A collection of experiments,
-            websites and interactive
-            experiences I've created.
-
-        </p>
 
     </div>
 
@@ -635,14 +636,18 @@
 
 
         <!-- =================================================
-             PROJECT 01 — VOID
+             PROJECT 01 — PROJECT VOID
         ================================================== -->
 
-        <article
-            class="project-card project-void"
-        >
+        <article class="project-card">
 
-            <div class="project-visual">
+
+            <a
+                href="https://rajpathak158.github.io/project-void/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-visual project-void"
+            >
 
                 <div class="project-glow"></div>
 
@@ -652,42 +657,24 @@
                 </div>
 
 
-                <div class="project-label">
-                    3D GAME / THREE.JS
-                </div>
-
-
                 <div class="project-orbit">
 
                     <div></div>
+
                     <div></div>
+
                     <div></div>
 
                 </div>
 
 
-                <div class="project-visual-title">
+                <div class="project-placeholder">
 
                     PROJECT
 
-                    <strong>
-                        VOID
-                    </strong>
+                    <br>
 
-                </div>
-
-
-                <div class="project-tech">
-
-                    THREE.JS
-
-                    <span>•</span>
-
-                    JAVASCRIPT
-
-                    <span>•</span>
-
-                    WEBGL
+                    VOID
 
                 </div>
 
@@ -696,62 +683,36 @@
                     ↗
                 </div>
 
-            </div>
+            </a>
 
 
             <div class="project-details">
 
-                <div class="project-heading">
-
-                    <span>
-                        01 / 03
-                    </span>
-
-
-                    <h3>
-                        PROJECT: VOID
-                    </h3>
-
+                <div class="project-category">
+                    3D GAME / THREE.JS
                 </div>
+
+
+                <h3>
+                    Project VOID
+                </h3>
 
 
                 <p>
 
-                    A browser-based 3D game project
-                    built with Three.js and JavaScript,
-                    featuring an interactive world,
-                    player movement and mobile-focused
-                    controls.
+                    A futuristic 3D browser experience
+                    built with JavaScript and Three.js,
+                    focused on interactive environments,
+                    movement and immersive gameplay.
 
                 </p>
-
-
-                <div class="project-tags">
-
-                    <span>
-                        3D
-                    </span>
-
-                    <span>
-                        GAME DEVELOPMENT
-                    </span>
-
-                    <span>
-                        THREE.JS
-                    </span>
-
-                    <span>
-                        MOBILE
-                    </span>
-
-                </div>
 
 
                 <a
                     href="https://rajpathak158.github.io/project-void/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="project-link magnetic"
+                    class="project-link"
                 >
 
                     VIEW PROJECT
@@ -772,11 +733,15 @@
              PROJECT 02 — PEACH LAW 2.0
         ================================================== -->
 
-        <article
-            class="project-card project-law"
-        >
+        <article class="project-card">
 
-            <div class="project-visual">
+
+            <a
+                href="https://rajpathak158.github.io/Peach-law-2.0/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-visual project-peach"
+            >
 
                 <div class="project-glow"></div>
 
@@ -786,68 +751,24 @@
                 </div>
 
 
-                <div class="project-label">
-                    WEB DESIGN / DEVELOPMENT
-                </div>
+                <div class="project-orbit">
 
+                    <div></div>
 
-                <div class="law-visual">
+                    <div></div>
 
-                    <div class="law-frame">
-
-
-                        <div class="law-frame-top">
-
-                            <span>
-                                PEACH LAW
-                            </span>
-
-
-                            <span>
-                                2026
-                            </span>
-
-                        </div>
-
-
-                        <div class="law-frame-content">
-
-                            <small>
-                                LEGAL
-                                EXCELLENCE
-                            </small>
-
-
-                            <strong>
-                                PEACH
-                            </strong>
-
-
-                            <strong>
-                                LAW
-                            </strong>
-
-
-                            <div class="law-line"></div>
-
-                        </div>
-
-                    </div>
+                    <div></div>
 
                 </div>
 
 
-                <div class="project-tech">
+                <div class="project-placeholder">
 
-                    HTML
+                    PEACH
 
-                    <span>•</span>
+                    <br>
 
-                    CSS
-
-                    <span>•</span>
-
-                    JAVASCRIPT
+                    LAW
 
                 </div>
 
@@ -856,65 +777,36 @@
                     ↗
                 </div>
 
-            </div>
+            </a>
 
 
             <div class="project-details">
 
-                <div class="project-heading">
-
-                    <span>
-                        02 / 03
-                    </span>
-
-
-                    <h3>
-                        PEACH LAW 2.0
-                    </h3>
-
+                <div class="project-category">
+                    LAW FIRM / WEB DESIGN
                 </div>
+
+
+                <h3>
+                    Peach Law 2.0
+                </h3>
 
 
                 <p>
 
-                    A modern law-firm website focused
-                    on premium visual design,
-                    responsive layouts, smooth
-                    interactions and professional
-                    presentation.
+                    A modern law-firm website designed
+                    around clarity, professional visual
+                    identity, responsive layouts and
+                    smooth interactive experiences.
 
                 </p>
-
-
-                <div class="project-tags">
-
-                    <span>
-                        WEB DESIGN
-                    </span>
-
-
-                    <span>
-                        RESPONSIVE
-                    </span>
-
-
-                    <span>
-                        ANIMATION
-                    </span>
-
-
-                    <span>
-                        UI / UX
-                    </span>
-
-                </div>
 
 
                 <a
                     href="https://rajpathak158.github.io/Peach-law-2.0/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="project-link magnetic"
+                    class="project-link"
                 >
 
                     VIEW PROJECT
@@ -932,14 +824,18 @@
 
 
         <!-- =================================================
-             PROJECT 03 — BLACK HOLE
+             PROJECT 03 — BLACK HOLE LAST ORBIT
         ================================================== -->
 
-        <article
-            class="project-card project-space"
-        >
+        <article class="project-card">
 
-            <div class="project-visual">
+
+            <a
+                href="https://rajpathak158.github.io/black-hole-last-orbit/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-visual project-blackhole"
+            >
 
                 <div class="project-glow"></div>
 
@@ -949,58 +845,24 @@
                 </div>
 
 
-                <div class="project-label">
-                    EXPERIMENTAL / 3D
-                </div>
+                <div class="project-orbit">
 
+                    <div></div>
 
-                <div class="blackhole-visual">
+                    <div></div>
 
-                    <div class="blackhole-stars"></div>
-
-
-                    <div
-                        class="blackhole-ring ring-a"
-                    ></div>
-
-
-                    <div
-                        class="blackhole-ring ring-b"
-                    ></div>
-
-
-                    <div
-                        class="blackhole-ring ring-c"
-                    ></div>
-
-
-                    <div class="blackhole-core"></div>
+                    <div></div>
 
                 </div>
 
 
-                <div class="blackhole-title">
+                <div class="project-placeholder">
 
                     BLACK HOLE
 
-                    <strong>
-                        LAST ORBIT
-                    </strong>
+                    <br>
 
-                </div>
-
-
-                <div class="project-tech">
-
-                    WEBGL
-
-                    <span>•</span>
-
-                    THREE.JS
-
-                    <span>•</span>
-
-                    SPACE
+                    LAST ORBIT
 
                 </div>
 
@@ -1009,64 +871,41 @@
                     ↗
                 </div>
 
-            </div>
+            </a>
 
 
             <div class="project-details">
 
-                <div class="project-heading">
-
-                    <span>
-                        03 / 03
-                    </span>
-
-
-                    <h3>
-                        BLACK HOLE: LAST ORBIT
-                    </h3>
-
+                <div class="project-category">
+                    CREATIVE WEB / SPACE
                 </div>
+
+
+                <h3>
+
+                    Black Hole
+
+                    <br>
+
+                    Last Orbit
+
+                </h3>
 
 
                 <p>
 
-                    An experimental cosmic web
-                    experience inspired by black
-                    holes, deep space and cinematic
-                    visual storytelling.
+                    An experimental cinematic web
+                    experience inspired by black holes,
+                    deep space and futuristic astronomy.
 
                 </p>
-
-
-                <div class="project-tags">
-
-                    <span>
-                        SPACE
-                    </span>
-
-
-                    <span>
-                        WEBGL
-                    </span>
-
-
-                    <span>
-                        3D
-                    </span>
-
-
-                    <span>
-                        EXPERIMENTAL
-                    </span>
-
-                </div>
 
 
                 <a
                     href="https://rajpathak158.github.io/black-hole-last-orbit/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="project-link magnetic"
+                    class="project-link"
                 >
 
                     VIEW PROJECT
@@ -1260,6 +1099,7 @@
 
         </div>
 
+
     </div>
 
 </section>
@@ -1329,19 +1169,33 @@
 
     <div class="social-links">
 
-        <a href="#">
+
+        <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
             GitHub
         </a>
 
 
-        <a href="#">
+        <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
             LinkedIn
         </a>
 
 
-        <a href="#">
+        <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
             Instagram
         </a>
+
 
     </div>
 
@@ -1367,7 +1221,7 @@
 
 
 <!-- =====================================================
-     THREE.JS GALAXY
+     JAVASCRIPT
 ====================================================== -->
 
 <script
@@ -1375,11 +1229,6 @@
     src="./js/scene.js"
 ></script>
 
-
-
-<!-- =====================================================
-     MAIN JAVASCRIPT
-====================================================== -->
 
 <script
     src="./js/main.js"
