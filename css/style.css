@@ -3497,7 +3497,555 @@ button {
     }
 
 }
+/* =========================================================
+   PREMIUM PROJECT WALL
+========================================================= */
 
+.projects {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+
+/* =========================================================
+   PROJECT CARD
+========================================================= */
+
+.project-card {
+    position: relative;
+    width: 100%;
+    min-height: 430px;
+
+    display: grid;
+    grid-template-columns: 1.25fr 0.75fr;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(255,255,255,0.12);
+
+    background: rgba(255,255,255,0.025);
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,0.35);
+
+    transition:
+        transform .5s cubic-bezier(.2,.8,.2,1),
+        border-color .4s ease,
+        box-shadow .4s ease;
+}
+
+.project-card::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    z-index: 10;
+
+    pointer-events: none;
+
+    border: 1px solid
+        rgba(150,110,255,0.18);
+}
+
+.project-card:hover {
+    transform: translateY(-7px);
+
+    border-color:
+        rgba(170,130,255,0.45);
+
+    box-shadow:
+        0 35px 100px rgba(0,0,0,0.5),
+        0 0 70px rgba(100,70,255,0.08);
+}
+
+
+/* =========================================================
+   PROJECT VISUAL
+========================================================= */
+
+.project-visual {
+    position: relative;
+
+    min-height: 430px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    text-decoration: none;
+
+    border-right:
+        1px solid rgba(255,255,255,0.1);
+}
+
+
+/* VOID */
+
+.project-void {
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(90,60,255,.25),
+            transparent 58%
+        ),
+        linear-gradient(
+            135deg,
+            #09051d,
+            #02010a
+        );
+}
+
+
+/* PEACH LAW */
+
+.project-peach {
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(190,100,255,.22),
+            transparent 60%
+        ),
+        linear-gradient(
+            135deg,
+            #120719,
+            #03010a
+        );
+}
+
+
+/* BLACK HOLE */
+
+.project-blackhole {
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(255,150,50,.22),
+            transparent 58%
+        ),
+        linear-gradient(
+            135deg,
+            #180b04,
+            #03010a
+        );
+}
+
+
+/* =========================================================
+   PROJECT GLOW
+========================================================= */
+
+.project-glow {
+    position: absolute;
+
+    width: 360px;
+    height: 360px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(120,80,255,.28),
+            transparent 70%
+        );
+
+    filter: blur(12px);
+
+    transition:
+        transform .8s ease;
+}
+
+.project-card:hover .project-glow {
+    transform: scale(1.25);
+}
+
+
+/* =========================================================
+   PROJECT NUMBER
+========================================================= */
+
+.project-number {
+    position: absolute;
+
+    top: 28px;
+    left: 30px;
+
+    z-index: 5;
+
+    font-size: 10px;
+
+    letter-spacing: .2em;
+
+    color:
+        rgba(255,255,255,.5);
+}
+
+
+/* =========================================================
+   ORBIT
+========================================================= */
+
+.project-orbit {
+    position: absolute;
+
+    width: 220px;
+    height: 220px;
+
+    border:
+        1px solid rgba(160,120,255,.3);
+
+    border-radius: 50%;
+
+    animation:
+        projectOrbit 14s linear infinite;
+}
+
+.project-orbit::before {
+    content: "";
+
+    position: absolute;
+    inset: 35px;
+
+    border:
+        1px solid rgba(0,210,255,.2);
+
+    border-radius: 50%;
+}
+
+.project-orbit::after {
+    content: "";
+
+    position: absolute;
+    inset: 70px;
+
+    border:
+        1px solid rgba(255,80,210,.16);
+
+    border-radius: 50%;
+}
+
+.project-orbit div {
+    position: absolute;
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    top: -3px;
+    left: 50%;
+
+    background: #a080ff;
+
+    box-shadow:
+        0 0 18px rgba(160,120,255,.8);
+}
+
+.project-orbit div:nth-child(2) {
+    top: 50%;
+    left: -3px;
+
+    background: #00d9ff;
+
+    box-shadow:
+        0 0 18px rgba(0,217,255,.8);
+}
+
+.project-orbit div:nth-child(3) {
+    top: auto;
+    left: auto;
+
+    right: 10px;
+    bottom: 20px;
+
+    background: #ff55d8;
+
+    box-shadow:
+        0 0 18px rgba(255,85,216,.8);
+}
+
+@keyframes projectOrbit {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   PROJECT TITLE
+========================================================= */
+
+.project-placeholder {
+    position: relative;
+
+    z-index: 5;
+
+    text-align: center;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size:
+        clamp(30px,4vw,55px);
+
+    line-height: .9;
+
+    letter-spacing: -.06em;
+
+    color: #fff;
+
+    text-shadow:
+        0 0 40px rgba(120,80,255,.45);
+
+    transition:
+        transform .5s ease;
+}
+
+.project-card:hover
+.project-placeholder {
+    transform: scale(1.05);
+}
+
+
+/* =========================================================
+   CORNER ARROW
+========================================================= */
+
+.project-corner {
+    position: absolute;
+
+    right: 28px;
+    bottom: 28px;
+
+    z-index: 6;
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid rgba(255,255,255,.18);
+
+    background:
+        rgba(0,0,0,.25);
+
+    backdrop-filter:
+        blur(10px);
+
+    color: #fff;
+
+    transition:
+        transform .4s ease,
+        border-color .4s ease;
+}
+
+.project-card:hover
+.project-corner {
+    transform:
+        translate(4px,-4px);
+
+    border-color:
+        rgba(180,140,255,.7);
+}
+
+
+/* =========================================================
+   DETAILS
+========================================================= */
+
+.project-details {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 55px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.035),
+            rgba(255,255,255,.005)
+        );
+}
+
+.project-category {
+    margin-bottom: 15px;
+
+    font-size: 9px;
+
+    letter-spacing: .2em;
+
+    color:
+        #a98cff;
+}
+
+.project-details h3 {
+    margin: 0;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size:
+        clamp(34px,4vw,55px);
+
+    line-height: .95;
+
+    font-weight: 500;
+
+    letter-spacing: -.06em;
+
+    color: #fff;
+}
+
+.project-details p {
+    max-width: 420px;
+
+    margin-top: 25px;
+
+    font-size: 13px;
+
+    line-height: 1.8;
+
+    color:
+        rgba(255,255,255,.48);
+}
+
+
+/* =========================================================
+   VIEW PROJECT BUTTON
+========================================================= */
+
+.project-link {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    width: fit-content;
+
+    margin-top: 30px;
+
+    padding: 13px 18px;
+
+    border:
+        1px solid rgba(255,255,255,.18);
+
+    color: #fff;
+
+    text-decoration: none;
+
+    font-size: 9px;
+
+    letter-spacing: .16em;
+
+    transition:
+        all .35s ease;
+}
+
+.project-link span {
+    font-size: 15px;
+}
+
+.project-link:hover {
+    background:
+        rgba(120,80,255,.15);
+
+    border-color:
+        rgba(170,130,255,.7);
+
+    transform:
+        translateY(-3px);
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .project-card {
+        grid-template-columns: 1fr;
+    }
+
+    .project-visual {
+        min-height: 360px;
+
+        border-right: none;
+
+        border-bottom:
+            1px solid rgba(255,255,255,.1);
+    }
+
+    .project-details {
+        padding: 45px 40px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .projects {
+        gap: 22px;
+    }
+
+    .project-visual {
+        min-height: 300px;
+    }
+
+    .project-orbit {
+        width: 175px;
+        height: 175px;
+    }
+
+    .project-placeholder {
+        font-size: 30px;
+    }
+
+    .project-number {
+        top: 20px;
+        left: 20px;
+    }
+
+    .project-corner {
+        right: 20px;
+        bottom: 20px;
+    }
+
+    .project-details {
+        padding: 45px 25px 35px;
+    }
+
+    .project-details h3 {
+        font-size: 38px;
+    }
+
+    .project-details p {
+        font-size: 12px;
+    }
+}
 
 /* =========================================================
    REDUCED MOTION
