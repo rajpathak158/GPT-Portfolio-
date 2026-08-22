@@ -23,11 +23,14 @@
     <title>Raj Pathak — Creative Developer</title>
 
 
-    <!-- =================================================
+    <!-- =====================================================
          FONTS
-    ================================================== -->
+    ====================================================== -->
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
 
     <link
         rel="preconnect"
@@ -41,9 +44,9 @@
     >
 
 
-    <!-- =================================================
+    <!-- =====================================================
          MAIN CSS
-    ================================================== -->
+    ====================================================== -->
 
     <link
         rel="stylesheet"
@@ -57,7 +60,7 @@
 
 
 <!-- =====================================================
-     10 SECOND CINEMATIC INTRO
+     CINEMATIC INTRO
 ====================================================== -->
 
 <div
@@ -66,9 +69,9 @@
 >
 
     <!--
-        10 SECOND GEMINI VIDEO
+        YOUR 10-SECOND VIDEO
 
-        Video is located in the ROOT of the repository.
+        The MP4 is in the ROOT of the repository.
     -->
 
     <video
@@ -82,7 +85,7 @@
     ></video>
 
 
-    <!-- CINEMATIC OVERLAYS -->
+    <!-- Cinematic overlays -->
 
     <div class="intro-overlay"></div>
 
@@ -92,7 +95,7 @@
 
 
     <!-- =================================================
-         TOP
+         INTRO TOP
     ================================================== -->
 
     <div class="intro-top">
@@ -100,6 +103,7 @@
         <div class="intro-logo">
             RP<span>.</span>
         </div>
+
 
         <div class="intro-top-label">
             PERSONAL PORTFOLIO / 2026
@@ -109,7 +113,7 @@
 
 
     <!-- =================================================
-         CENTER
+         INTRO CENTER
     ================================================== -->
 
     <div class="intro-center">
@@ -170,7 +174,7 @@
 
 
     <!-- =================================================
-         BOTTOM
+         INTRO BOTTOM
     ================================================== -->
 
     <div class="intro-bottom">
@@ -313,7 +317,7 @@
 
 
 <!-- =====================================================
-     MAIN
+     MAIN WEBSITE
 ====================================================== -->
 
 <main id="mainContent">
@@ -321,7 +325,7 @@
 
 
 <!-- =====================================================
-     HERO / GALAXY
+     HERO
 ====================================================== -->
 
 <section
@@ -337,8 +341,6 @@
     ></canvas>
 
 
-    <!-- VISUAL EFFECTS -->
-
     <div class="hero-vignette"></div>
 
     <div class="hero-gradient"></div>
@@ -348,9 +350,8 @@
     <div class="hero-noise"></div>
 
 
-    <!-- =================================================
-         HERO CONTENT
-    ================================================== -->
+
+    <!-- HERO CONTENT -->
 
     <div class="hero-content">
 
@@ -428,7 +429,7 @@
 
 
 
-    <!-- SIDE INFORMATION -->
+    <!-- SIDE INFO -->
 
     <div class="hero-side-info">
 
@@ -472,7 +473,7 @@
 
 
 
-    <!-- SCROLL -->
+    <!-- SCROLL INDICATOR -->
 
     <div class="scroll-indicator">
 
@@ -683,9 +684,7 @@
                 <div class="project-orbit">
 
                     <div></div>
-
                     <div></div>
-
                     <div></div>
 
                 </div>
@@ -758,9 +757,7 @@
                 <div class="project-orbit">
 
                     <div></div>
-
                     <div></div>
-
                     <div></div>
 
                 </div>
@@ -833,9 +830,7 @@
                 <div class="project-orbit">
 
                     <div></div>
-
                     <div></div>
-
                     <div></div>
 
                 </div>
@@ -1081,7 +1076,6 @@
     class="section contact"
 >
 
-
     <div class="contact-background">
 
         <div class="contact-orb"></div>
@@ -1120,7 +1114,7 @@
     </p>
 
 
-    <!-- CHANGE EMAIL LATER -->
+    <!-- CHANGE THIS EMAIL -->
 
     <a
         href="mailto:your@email.com"
@@ -1179,7 +1173,7 @@
 
 
 <!-- =====================================================
-     JAVASCRIPT
+     THREE.JS GALAXY
 ====================================================== -->
 
 <script
@@ -1187,6 +1181,11 @@
     src="./js/scene.js"
 ></script>
 
+
+
+<!-- =====================================================
+     MAIN JAVASCRIPT
+====================================================== -->
 
 <script
     src="./js/main.js"
@@ -1200,208 +1199,384 @@
 
 <script>
 
-document.addEventListener("DOMContentLoaded", () => {
-
-    const intro = document.getElementById("intro");
-
-    const video = document.getElementById("introVideo");
-
-    const enterButton = document.getElementById("enterButton");
-
-    const timer = document.getElementById("introTimer");
-
-    const loader = document.getElementById("loader");
-
-    let introFinished = false;
-
-    let timerInterval = null;
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
 
-    /*
-    ======================================================
-    FINISH INTRO
-    ======================================================
-    */
+        /* =================================================
+           ELEMENTS
+        ================================================= */
 
-    function finishIntro() {
+        const intro =
+            document.getElementById("intro");
 
-        if (introFinished) return;
+        const video =
+            document.getElementById("introVideo");
 
-        introFinished = true;
+        const enterButton =
+            document.getElementById("enterButton");
 
+        const timer =
+            document.getElementById("introTimer");
 
-        if (timerInterval) {
-
-            clearInterval(timerInterval);
-
-        }
-
-
-        /*
-        Fade the cinematic intro away
-        */
-
-        intro.classList.add("intro-exit");
+        const loader =
+            document.getElementById("loader");
 
 
-        /*
-        Reveal main portfolio
-        */
+        /* =================================================
+           SETTINGS
+        ================================================= */
 
-        document.body.classList.remove("intro-active");
-
-        document.body.classList.add("experience-active");
+        const INTRO_DURATION = 10;
 
 
-        /*
-        Remove intro after transition
-        */
+        /* =================================================
+           STATE
+        ================================================= */
 
-        setTimeout(() => {
+        let introFinished = false;
 
-            intro.style.display = "none";
+        let startTime = null;
 
-        }, 1500);
-
-    }
+        let countdownTimer = null;
 
 
 
-    /*
-    ======================================================
-    PLAY VIDEO
-    ======================================================
-    */
+        /* =================================================
+           FINISH INTRO
+        ================================================= */
 
-    video.play()
-        .then(() => {
+        function finishIntro() {
 
-            console.log("Intro video playing.");
 
-        })
-        .catch(() => {
+            if (introFinished) {
+                return;
+            }
 
-            /*
-            Some browsers block autoplay.
 
-            The ENTER button will still work.
-            */
+            introFinished = true;
 
-            console.log(
-                "Autoplay blocked. Waiting for user interaction."
+
+            /* Stop countdown */
+
+            if (countdownTimer) {
+
+                clearInterval(
+                    countdownTimer
+                );
+
+            }
+
+
+            /* Fade intro */
+
+            intro.classList.add(
+                "intro-exit"
             );
 
-        });
+
+            /* Activate portfolio */
+
+            document.body.classList.remove(
+                "intro-active"
+            );
 
 
+            document.body.classList.add(
+                "experience-active"
+            );
 
-    /*
-    ======================================================
-    VIDEO ENDED
-    ======================================================
-    */
 
-    video.addEventListener(
-        "ended",
-        () => {
+            /* Remove intro */
 
-            finishIntro();
+            setTimeout(
+                () => {
+
+                    intro.style.display =
+                        "none";
+
+                },
+                1500
+            );
 
         }
-    );
 
 
 
-    /*
-    ======================================================
-    ENTER BUTTON
-    ======================================================
-    */
+        /* =================================================
+           START INTRO
+        ================================================= */
 
-    enterButton.addEventListener(
-        "click",
-        () => {
-
-            /*
-            Stop video immediately
-            */
-
-            video.pause();
+        function startIntro() {
 
 
             /*
-            Jump to portfolio
-            */
+             * Prevent starting twice.
+             */
 
-            finishIntro();
+            if (startTime !== null) {
+                return;
+            }
+
+
+            startTime =
+                performance.now();
+
+
+            /*
+             * Always start video
+             * from the beginning.
+             */
+
+            try {
+
+                video.currentTime = 0;
+
+            } catch (error) {
+
+                console.log(
+                    "Could not reset video.",
+                    error
+                );
+
+            }
+
+
+            /*
+             * Attempt autoplay.
+             */
+
+            const playPromise =
+                video.play();
+
+
+            if (
+                playPromise &&
+                typeof playPromise.catch ===
+                "function"
+            ) {
+
+                playPromise.catch(
+                    () => {
+
+                        console.log(
+                            "Autoplay blocked."
+                        );
+
+                    }
+                );
+
+            }
+
+
+
+            /* =================================================
+               10 SECOND TIMER
+            ================================================= */
+
+            countdownTimer =
+                setInterval(
+                    () => {
+
+
+                        if (
+                            startTime ===
+                            null
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        const elapsed =
+                            (
+                                performance.now()
+                                -
+                                startTime
+                            ) / 1000;
+
+
+                        const remaining =
+                            Math.max(
+                                0,
+                                Math.ceil(
+                                    INTRO_DURATION
+                                    -
+                                    elapsed
+                                )
+                            );
+
+
+                        if (timer) {
+
+                            timer.textContent =
+                                String(
+                                    remaining
+                                ).padStart(
+                                    2,
+                                    "0"
+                                );
+
+                        }
+
+
+                        /*
+                         * ONLY finish after
+                         * 10 real seconds.
+                         */
+
+                        if (
+                            elapsed >=
+                            INTRO_DURATION
+                        ) {
+
+                            clearInterval(
+                                countdownTimer
+                            );
+
+
+                            finishIntro();
+
+                        }
+
+
+                    },
+                    50
+                );
 
         }
-    );
 
 
 
-    /*
-    ======================================================
-    10 SECOND COUNTDOWN
-    ======================================================
-    */
+        /* =================================================
+           VIDEO READY
+        ================================================= */
 
-    timerInterval = setInterval(() => {
+        video.addEventListener(
+            "loadedmetadata",
+            () => {
 
-        if (
-            video.duration &&
-            !Number.isNaN(video.duration)
-        ) {
 
-            const remaining =
-                Math.max(
-                    0,
-                    Math.ceil(
-                        video.duration -
-                        video.currentTime
-                    )
+                console.log(
+                    "Detected video duration:",
+                    video.duration
                 );
 
 
-            timer.textContent =
-                String(remaining).padStart(2, "0");
+                startIntro();
+
+            }
+        );
+
+
+
+        /* =================================================
+           FALLBACK
+        ================================================= */
+
+        if (
+            video.readyState >= 1
+        ) {
+
+            startIntro();
 
         }
 
-    }, 100);
+
+
+        /* =================================================
+           IMPORTANT
+           DO NOT USE "ENDED"
+        ================================================= */
+
+        video.addEventListener(
+            "ended",
+            () => {
+
+
+                /*
+                 * Intentionally empty.
+                 *
+                 * If the browser says the video
+                 * ended early, the portfolio will
+                 * NOT transition until the timer
+                 * reaches 10 seconds.
+                 */
+
+                console.log(
+                    "Video ended event detected."
+                );
+
+            }
+        );
 
 
 
-    /*
-    ======================================================
-    LOADER
-    ======================================================
-    */
+        /* =================================================
+           ENTER EXPERIENCE
+        ================================================= */
 
-    window.addEventListener(
-        "load",
-        () => {
+        enterButton.addEventListener(
+            "click",
+            () => {
 
-            setTimeout(() => {
 
-                if (loader) {
+                if (
+                    introFinished
+                ) {
 
-                    loader.classList.add(
-                        "loader-hidden"
-                    );
+                    return;
 
                 }
 
-            }, 500);
 
-        }
-    );
+                video.pause();
 
-});
+
+                finishIntro();
+
+            }
+        );
+
+
+
+        /* =================================================
+           LOADER
+        ================================================= */
+
+        window.addEventListener(
+            "load",
+            () => {
+
+
+                setTimeout(
+                    () => {
+
+
+                        if (loader) {
+
+                            loader.classList.add(
+                                "loader-hidden"
+                            );
+
+                        }
+
+
+                    },
+                    500
+                );
+
+            }
+        );
+
+    }
+);
 
 </script>
 
 
 </body>
 
-                </html>
+    </html>
