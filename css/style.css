@@ -4890,7 +4890,1085 @@ button {
 
 }
 
+/* =========================================================
+   STEP 10 — CINEMATIC CONTACT / FINAL EXPERIENCE
+========================================================= */
 
+.contact {
+    position: relative;
+    min-height: 100vh;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(88, 70, 220, .12),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 15% 80%,
+            rgba(40, 180, 255, .06),
+            transparent 30%
+        ),
+        #02010a;
+}
+
+
+/* =========================================================
+   SPACE
+========================================================= */
+
+.contact-space {
+    position: absolute;
+    inset: 0;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(120, 80, 255, .08),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 80% 70%,
+            rgba(40, 170, 255, .06),
+            transparent 25%
+        );
+
+    pointer-events: none;
+}
+
+
+.contact-stars {
+    position: absolute;
+    inset: 0;
+
+    opacity: .45;
+
+    background-image:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.8) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        130px 130px;
+
+    animation:
+        contactStarsMove 25s linear infinite;
+
+    pointer-events: none;
+}
+
+
+@keyframes contactStarsMove {
+
+    from {
+        transform:
+            translate3d(0,0,0);
+    }
+
+    to {
+        transform:
+            translate3d(-130px,130px,0);
+    }
+
+}
+
+
+/* =========================================================
+   CENTRAL GLOW
+========================================================= */
+
+.contact-glow {
+    position: absolute;
+
+    left: 50%;
+    top: 47%;
+
+    width: 600px;
+    height: 600px;
+
+    transform:
+        translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(108, 91, 255, .14),
+            transparent 65%
+        );
+
+    filter:
+        blur(40px);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   ORBITAL SYSTEM
+========================================================= */
+
+.contact-orbit-system {
+
+    position: absolute;
+
+    left: 50%;
+    top: 46%;
+
+    width: 520px;
+    height: 520px;
+
+    transform:
+        translate(-50%, -50%);
+
+    pointer-events: none;
+
+}
+
+
+.contact-orbit {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    border-radius: 50%;
+
+    border:
+        1px solid
+        rgba(150, 140, 255, .12);
+
+    transform:
+        translate(-50%, -50%);
+
+}
+
+
+.orbit-a {
+
+    width: 100%;
+    height: 100%;
+
+    animation:
+        contactOrbitOne 22s linear infinite;
+
+}
+
+
+.orbit-b {
+
+    width: 72%;
+    height: 72%;
+
+    border-color:
+        rgba(70, 210, 255, .12);
+
+    transform:
+        translate(-50%, -50%)
+        rotateX(65deg);
+
+    animation:
+        contactOrbitTwo 16s linear infinite reverse;
+
+}
+
+
+.orbit-c {
+
+    width: 46%;
+    height: 46%;
+
+    border-color:
+        rgba(200, 120, 255, .14);
+
+    transform:
+        translate(-50%, -50%)
+        rotateY(65deg);
+
+    animation:
+        contactOrbitThree 11s linear infinite;
+
+}
+
+
+.orbit-a::before,
+.orbit-b::before,
+.orbit-c::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    top: 50%;
+    left: 0;
+
+    transform:
+        translate(-50%, -50%);
+
+    background:
+        #9b8cff;
+
+    box-shadow:
+        0 0 18px
+        rgba(155,140,255,.9);
+
+}
+
+
+.orbit-b::before {
+
+    background:
+        #52d9ff;
+
+    box-shadow:
+        0 0 18px
+        rgba(82,217,255,.9);
+
+}
+
+
+.orbit-c::before {
+
+    background:
+        #d69cff;
+
+    box-shadow:
+        0 0 18px
+        rgba(214,156,255,.9);
+
+}
+
+
+@keyframes contactOrbitOne {
+
+    from {
+        transform:
+            translate(-50%, -50%)
+            rotate(0deg);
+    }
+
+    to {
+        transform:
+            translate(-50%, -50%)
+            rotate(360deg);
+    }
+
+}
+
+
+@keyframes contactOrbitTwo {
+
+    from {
+        transform:
+            translate(-50%, -50%)
+            rotateX(65deg)
+            rotate(0deg);
+    }
+
+    to {
+        transform:
+            translate(-50%, -50%)
+            rotateX(65deg)
+            rotate(360deg);
+    }
+
+}
+
+
+@keyframes contactOrbitThree {
+
+    from {
+        transform:
+            translate(-50%, -50%)
+            rotateY(65deg)
+            rotate(0deg);
+    }
+
+    to {
+        transform:
+            translate(-50%, -50%)
+            rotateY(65deg)
+            rotate(360deg);
+    }
+
+}
+
+
+/* =========================================================
+   CORE
+========================================================= */
+
+.contact-core {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 110px;
+    height: 110px;
+
+    transform:
+        translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            rgba(150,130,255,.3),
+            rgba(3,2,15,.96) 70%
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.2);
+
+    box-shadow:
+        0 0 60px
+        rgba(100,90,255,.18),
+
+        inset 0 0 35px
+        rgba(120,100,255,.15);
+
+    animation:
+        corePulse 4s ease-in-out infinite;
+
+}
+
+
+.contact-core span {
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+}
+
+
+.contact-core small {
+
+    margin-top: 5px;
+
+    font-size: 6px;
+
+    letter-spacing:
+        .2em;
+
+    opacity: .4;
+
+}
+
+
+@keyframes corePulse {
+
+    0%,
+    100% {
+        transform:
+            translate(-50%, -50%)
+            scale(1);
+    }
+
+    50% {
+        transform:
+            translate(-50%, -50%)
+            scale(1.06);
+    }
+
+}
+
+
+/* =========================================================
+   CONTACT CONTENT
+========================================================= */
+
+.contact-content {
+
+    position: relative;
+
+    z-index: 5;
+
+    width: min(
+        900px,
+        calc(100% - 40px)
+    );
+
+    margin:
+        0 auto;
+
+    text-align:
+        center;
+
+}
+
+
+.contact-content .eyebrow {
+
+    justify-content:
+        center;
+
+}
+
+
+.contact-title {
+
+    margin:
+        25px auto 0;
+
+    max-width:
+        850px;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size:
+        clamp(48px, 8vw, 110px);
+
+    line-height:
+        .95;
+
+    letter-spacing:
+        -.065em;
+
+}
+
+
+.contact-title span {
+
+    display: block;
+
+    background:
+        linear-gradient(
+            100deg,
+            #ffffff,
+            #a99dff 45%,
+            #69dfff
+        );
+
+    -webkit-background-clip:
+        text;
+
+    background-clip:
+        text;
+
+    color:
+        transparent;
+
+}
+
+
+.contact-description {
+
+    max-width:
+        550px;
+
+    margin:
+        30px auto 0;
+
+    color:
+        rgba(255,255,255,.45);
+
+    font-size:
+        14px;
+
+    line-height:
+        1.8;
+
+}
+
+
+/* =========================================================
+   EMAIL
+========================================================= */
+
+.contact-email {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        18px;
+
+    margin-top:
+        45px;
+
+    padding:
+        18px 24px;
+
+    color:
+        #ffffff;
+
+    text-decoration:
+        none;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size:
+        clamp(18px, 3vw, 28px);
+
+    border:
+        1px solid
+        rgba(255,255,255,.14);
+
+    background:
+        rgba(255,255,255,.035);
+
+    backdrop-filter:
+        blur(14px);
+
+    transition:
+        transform .35s ease,
+        border-color .35s ease,
+        background .35s ease;
+
+}
+
+
+.contact-email:hover {
+
+    transform:
+        translateY(-5px);
+
+    border-color:
+        rgba(150,140,255,.45);
+
+    background:
+        rgba(120,110,255,.08);
+
+}
+
+
+.contact-email-arrow {
+
+    display:
+        inline-flex;
+
+    width:
+        38px;
+
+    height:
+        38px;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    font-size:
+        16px;
+
+}
+
+
+/* =========================================================
+   SOCIAL LINKS
+========================================================= */
+
+.social-links {
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    gap:
+        10px;
+
+    margin-top:
+        35px;
+
+}
+
+
+.social-link {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        25px;
+
+    padding:
+        12px 15px;
+
+    color:
+        rgba(255,255,255,.5);
+
+    text-decoration:
+        none;
+
+    font-size:
+        10px;
+
+    letter-spacing:
+        .1em;
+
+    text-transform:
+        uppercase;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.1);
+
+    transition:
+        color .3s ease,
+        border-color .3s ease,
+        transform .3s ease;
+
+}
+
+
+.social-link:hover {
+
+    color:
+        #ffffff;
+
+    border-color:
+        rgba(150,140,255,.5);
+
+    transform:
+        translateY(-3px);
+
+}
+
+
+.social-link span:last-child {
+
+    opacity:
+        .5;
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.contact-status {
+
+    position:
+        absolute;
+
+    left:
+        40px;
+
+    right:
+        40px;
+
+    bottom:
+        105px;
+
+    z-index:
+        5;
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    padding-top:
+        18px;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.07);
+
+    font-size:
+        8px;
+
+    letter-spacing:
+        .15em;
+
+    color:
+        rgba(255,255,255,.3);
+
+}
+
+
+.contact-status > div:first-child {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+}
+
+
+.contact-status-dot {
+
+    width:
+        6px;
+
+    height:
+        6px;
+
+    border-radius:
+        50%;
+
+    background:
+        #63e6a4;
+
+    box-shadow:
+        0 0 12px
+        rgba(99,230,164,.8);
+
+    animation:
+        contactStatusPulse 2s ease-in-out infinite;
+
+}
+
+
+@keyframes contactStatusPulse {
+
+    0%,
+    100% {
+        opacity:
+            .4;
+    }
+
+    50% {
+        opacity:
+            1;
+    }
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.site-footer {
+
+    position:
+        absolute;
+
+    left:
+        40px;
+
+    right:
+        40px;
+
+    bottom:
+        30px;
+
+    z-index:
+        5;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1fr 1fr;
+
+    align-items:
+        center;
+
+    font-size:
+        8px;
+
+    letter-spacing:
+        .13em;
+
+    color:
+        rgba(255,255,255,.28);
+
+}
+
+
+.footer-left {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        15px;
+
+}
+
+
+.footer-logo {
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size:
+        20px;
+
+    font-weight:
+        700;
+
+    color:
+        rgba(255,255,255,.8);
+
+}
+
+
+.footer-logo span {
+
+    color:
+        #9b8cff;
+
+}
+
+
+.footer-center {
+
+    text-align:
+        center;
+
+}
+
+
+.footer-right {
+
+    display:
+        flex;
+
+    justify-content:
+        flex-end;
+
+    align-items:
+        center;
+
+    gap:
+        25px;
+
+}
+
+
+.footer-right a {
+
+    color:
+        rgba(255,255,255,.4);
+
+    text-decoration:
+        none;
+
+    transition:
+        color .3s ease;
+
+}
+
+
+.footer-right a:hover {
+
+    color:
+        #ffffff;
+
+}
+
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .contact-orbit-system {
+
+        width:
+            360px;
+
+        height:
+            360px;
+
+        opacity:
+            .55;
+
+    }
+
+
+    .contact-content {
+
+        width:
+            calc(100% - 30px);
+
+    }
+
+
+    .contact-title {
+
+        font-size:
+            clamp(42px, 12vw, 70px);
+
+    }
+
+
+    .contact-description {
+
+        font-size:
+            12px;
+
+    }
+
+
+    .contact-email {
+
+        max-width:
+            100%;
+
+        font-size:
+            16px;
+
+        padding:
+            15px 17px;
+
+    }
+
+
+    .social-links {
+
+        flex-wrap:
+            wrap;
+
+    }
+
+
+    .contact-status {
+
+        left:
+            18px;
+
+        right:
+            18px;
+
+        bottom:
+            110px;
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+        gap:
+            10px;
+
+    }
+
+
+    .site-footer {
+
+        left:
+            18px;
+
+        right:
+            18px;
+
+        bottom:
+            20px;
+
+        display:
+            flex;
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+        gap:
+            10px;
+
+    }
+
+
+    .footer-center {
+
+        display:
+            none;
+
+    }
+
+
+    .footer-right {
+
+        width:
+            100%;
+
+        justify-content:
+            space-between;
+
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .contact-stars,
+    .contact-orbit,
+    .contact-core,
+    .contact-status-dot {
+
+        animation:
+            none;
+
+    }
+
+   }
 
 /* =========================================================
    MOBILE
