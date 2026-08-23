@@ -4068,5 +4068,197 @@ button {
         transition-duration:
             0.01ms !important;
     }
+/* =========================================================
+   STEP 7 — 3D PROJECT INTERACTION
+========================================================= */
 
+.project-card {
+    --mouse-x: 50%;
+    --mouse-y: 50%;
+
+    transform-style: preserve-3d;
+
+    will-change: transform;
+}
+
+
+/* POINTER LIGHT */
+
+.project-card::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: 50;
+
+    opacity: 0;
+
+    background:
+        radial-gradient(
+            circle at var(--mouse-x) var(--mouse-y),
+            rgba(255,255,255,.13),
+            transparent 28%
+        );
+
+    transition:
+        opacity .35s ease;
+
+}
+
+
+/* ACTIVE LIGHT */
+
+.project-card.project-active::after {
+
+    opacity: 1;
+
+}
+
+
+/* DEPTH FOR VISUAL */
+
+.project-card.project-active
+.project-visual {
+
+    transform:
+        translateZ(18px);
+
+}
+
+
+/* PROJECT CONTENT DEPTH */
+
+.project-card.project-active
+.project-top {
+
+    transform:
+        translateZ(28px);
+
+}
+
+
+.project-card.project-active
+.project-open {
+
+    transform:
+        translateZ(38px);
+
+}
+
+
+/* VOID DEPTH */
+
+.project-card.project-active
+.void-planet {
+
+    transform:
+        translate(-50%,-50%)
+        translateZ(25px);
+
+}
+
+
+/* LAW DEPTH */
+
+.project-card.project-active
+.law-heading {
+
+    transform:
+        translateZ(28px);
+
+}
+
+
+/* BLACK HOLE DEPTH */
+
+.project-card.project-active
+.blackhole-core {
+
+    transform:
+        translate(-50%,-50%)
+        translateZ(25px);
+
+}
+
+
+/* PROJECT DETAILS */
+
+.project-details {
+
+    transform:
+        translateZ(10px);
+
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .project-card {
+
+        transform:
+            none !important;
+
+        will-change:
+            auto;
+
+    }
+
+
+    .project-card::after {
+
+        display:
+            none;
+
+    }
+
+
+    .project-card.project-active
+    .project-visual,
+
+    .project-card.project-active
+    .project-top,
+
+    .project-card.project-active
+    .project-open,
+
+    .project-card.project-active
+    .law-heading,
+
+    .project-card.project-active
+    .blackhole-core {
+
+        transform:
+            none;
+
+    }
+
+}
+
+
+/* REDUCED MOTION */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .project-card {
+
+        transform:
+            none !important;
+
+    }
+
+    .project-card::after {
+
+        display:
+            none;
+
+    }
+
+}
    }
