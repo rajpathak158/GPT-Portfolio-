@@ -694,6 +694,163 @@ document.addEventListener(
             introVideo.pause();
 
         }
+/* =========================================================
+   STEP 7 — PREMIUM 3D PROJECT INTERACTION
+========================================================= */
 
+document.addEventListener("DOMContentLoaded", () => {
+
+    const cards = document.querySelectorAll(".project-card");
+
+    if (!cards.length) return;
+
+
+    cards.forEach((card) => {
+
+        let frame = null;
+
+        let mouseX = 0;
+        let mouseY = 0;
+
+        let currentX = 0;
+        let currentY = 0;
+
+
+        const update = () => {
+
+            currentX += (mouseX - currentX) * 0.08;
+            currentY += (mouseY - currentY) * 0.08;
+
+
+            const rotateY = currentX * 8;
+            const rotateX = -currentY * 8;
+
+
+            card.style.transform = `
+                perspective(1200px)
+                rotateX(${rotateX}deg)
+                rotateY(${rotateY}deg)
+                translateY(-6px)
+            `;
+
+
+            card.style.setProperty(
+                "--mouse-x",
+                `${50 + currentX * 50}%`
+            );
+
+
+            card.style.setProperty(
+                "--mouse-y",
+                `${50 + currentY * 50}%`
+            );
+
+
+            frame = requestAnimationFrame(update);
+
+        };
+
+
+        card.addEventListener("pointerenter", () => {
+
+            if (window.innerWidth <= 700) return;
+
+            card.classList.add("project-active");
+
+            if (!frame) {
+                frame = requestAnimationFrame(update);
+            }
+
+        });
+
+
+        card.addEventListener("pointermove", (event) => {
+
+            if (window.innerWidth <= 700) return;
+
+
+            const rect =
+                card.getBoundingClientRect();
+
+
+            const x =
+                (event.clientX - rect.left)
+                / rect.width;
+
+
+            const y =
+                (event.clientY - rect.top)
+                / rect.height;
+
+
+            mouseX =
+                (x - 0.5) * 2;
+
+
+            mouseY =
+                (y - 0.5) * 2;
+
+        });
+
+
+        card.addEventListener("pointerleave", () => {
+
+            mouseX = 0;
+            mouseY = 0;
+
+            card.classList.remove("project-active");
+
+
+            const reset = () => {
+
+                currentX +=
+                    (mouseX - currentX) * 0.12;
+
+                currentY +=
+                    (mouseY - currentY) * 0.12;
+
+
+                const rotateY =
+                    currentX * 8;
+
+                const rotateX =
+                    -currentY * 8;
+
+
+                card.style.transform = `
+                    perspective(1200px)
+                    rotateX(${rotateX}deg)
+                    rotateY(${rotateY}deg)
+                    translateY(0)
+                `;
+
+
+                if (
+                    Math.abs(currentX) > 0.001 ||
+                    Math.abs(currentY) > 0.001
+                ) {
+
+                    requestAnimationFrame(reset);
+
+                } else {
+
+                    card.style.transform = "";
+
+                }
+
+            };
+
+
+            reset();
+
+            cancelAnimationFrame(frame);
+
+            frame = null;
+
+        });
+
+    });
+
+});
     }
 );
