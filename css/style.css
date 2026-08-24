@@ -6016,7 +6016,311 @@ button {
 
 }
 
+/* =========================================================
+   STEP 11 — REAL MILKY WAY 3D HERO
+========================================================= */
 
+.hero {
+    position: relative;
+
+    min-height: 100svh;
+
+    overflow: hidden;
+
+    background:
+        #02030a;
+}
+
+
+/* =========================================================
+   THREE.JS CANVAS
+========================================================= */
+
+#webgl {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    z-index: 0;
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   HERO ATMOSPHERE
+========================================================= */
+
+.hero::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 1;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(2,3,10,.82) 0%,
+            rgba(2,3,10,.40) 38%,
+            rgba(2,3,10,.08) 70%,
+            rgba(2,3,10,.35) 100%
+        );
+
+}
+
+
+/* =========================================================
+   VIGNETTE
+========================================================= */
+
+.hero-vignette {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 2;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 30%,
+            rgba(0,0,0,.22) 65%,
+            rgba(0,0,0,.72) 100%
+        );
+
+}
+
+
+/* =========================================================
+   COLOR GRADIENT
+========================================================= */
+
+.hero-gradient {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 2;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            circle at 70% 35%,
+            rgba(83,67,170,.12),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at 25% 65%,
+            rgba(30,130,190,.08),
+            transparent 30%
+        );
+
+}
+
+
+/* =========================================================
+   IMAGE CREDIT
+========================================================= */
+
+.hero-image-credit {
+
+    position: absolute;
+
+    right: 30px;
+
+    bottom: 92px;
+
+    z-index: 5;
+
+    font-size: 7px;
+
+    letter-spacing:
+        .16em;
+
+    color:
+        rgba(255,255,255,.28);
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   SCANLINES
+========================================================= */
+
+.hero-scanlines {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 3;
+
+    pointer-events: none;
+
+    opacity: .035;
+
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            transparent 3px,
+            rgba(255,255,255,.4) 4px
+        );
+
+}
+
+
+/* =========================================================
+   NOISE
+========================================================= */
+
+.hero-noise {
+
+    position: absolute;
+
+    inset: -50%;
+
+    z-index: 3;
+
+    pointer-events: none;
+
+    opacity: .025;
+
+    background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+
+    animation:
+        heroNoiseMove .2s steps(2) infinite;
+
+}
+
+
+@keyframes heroNoiseMove {
+
+    0% {
+        transform:
+            translate(0,0);
+    }
+
+    25% {
+        transform:
+            translate(2%,-1%);
+    }
+
+    50% {
+        transform:
+            translate(-1%,2%);
+    }
+
+    75% {
+        transform:
+            translate(1%,1%);
+    }
+
+    100% {
+        transform:
+            translate(0,0);
+    }
+
+}
+
+
+/* =========================================================
+   CONTENT LAYER
+========================================================= */
+
+.hero-content {
+
+    position: relative;
+
+    z-index: 6;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .hero::after {
+
+        background:
+            linear-gradient(
+                90deg,
+                rgba(2,3,10,.78),
+                rgba(2,3,10,.32)
+            );
+
+    }
+
+
+    .hero-image-credit {
+
+        right: 18px;
+
+        bottom: 78px;
+
+        font-size: 6px;
+
+    }
+
+
+    .hero-scanlines {
+
+        display: none;
+
+    }
+
+
+    .hero-noise {
+
+        opacity:
+            .015;
+
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (
+    prefers-reduced-motion: reduce
+) {
+
+    .hero-noise {
+
+        animation:
+            none;
+
+    }
+
+}
 
 /* =========================================================
    REDUCED MOTION
