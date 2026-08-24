@@ -12,7 +12,7 @@
 
     <meta
         name="theme-color"
-        content="#02010a"
+        content="#02030a"
     >
 
     <meta
@@ -20,16 +20,30 @@
         content="Raj Pathak — Creative Developer building immersive digital experiences, interactive websites and 3D experiences."
     >
 
-    <title>Raj Pathak — Creative Developer</title>
+    <meta
+        name="author"
+        content="Raj Pathak"
+    >
+
+    <title>
+        Raj Pathak — Creative Developer
+    </title>
 
 
     <!-- =====================================================
          FONTS
     ====================================================== -->
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
 
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
 
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
@@ -56,7 +70,12 @@
      CINEMATIC INTRO
 ====================================================== -->
 
-<div id="intro" class="intro">
+<div
+    id="intro"
+    class="intro"
+>
+
+    <!-- YOUR 10 SECOND INTRO VIDEO -->
 
     <video
         id="introVideo"
@@ -64,10 +83,12 @@
         src="./gemini_generated_video_70c897fa.mp4"
         playsinline
         webkit-playsinline
-        preload="metadata"
+        preload="auto"
         muted
     ></video>
 
+
+    <!-- INTRO OVERLAYS -->
 
     <div class="intro-overlay"></div>
 
@@ -75,6 +96,8 @@
 
     <div class="intro-grain"></div>
 
+
+    <!-- TOP -->
 
     <div class="intro-top">
 
@@ -88,6 +111,8 @@
 
     </div>
 
+
+    <!-- CENTER -->
 
     <div class="intro-center">
 
@@ -126,6 +151,7 @@
 
             </span>
 
+
             <span class="enter-text">
                 ENTER EXPERIENCE
             </span>
@@ -142,6 +168,8 @@
 
     </div>
 
+
+    <!-- BOTTOM -->
 
     <div class="intro-bottom">
 
@@ -163,7 +191,10 @@
      LOADER
 ====================================================== -->
 
-<div id="loader" class="loader">
+<div
+    id="loader"
+    class="loader"
+>
 
     <div class="loader-content">
 
@@ -218,30 +249,51 @@
     <a
         href="#home"
         class="logo magnetic"
+        aria-label="Raj Pathak home"
     >
+
         RP<span>.</span>
+
     </a>
 
 
-    <nav class="desktop-nav">
+    <nav
+        class="desktop-nav"
+        aria-label="Main navigation"
+    >
 
-        <a href="#home" class="nav-link">
+        <a
+            href="#home"
+            class="nav-link"
+        >
             Home
         </a>
 
-        <a href="#about" class="nav-link">
+        <a
+            href="#about"
+            class="nav-link"
+        >
             About
         </a>
 
-        <a href="#work" class="nav-link">
+        <a
+            href="#work"
+            class="nav-link"
+        >
             Work
         </a>
 
-        <a href="#skills" class="nav-link">
+        <a
+            href="#skills"
+            class="nav-link"
+        >
             Skills
         </a>
 
-        <a href="#contact" class="nav-link">
+        <a
+            href="#contact"
+            class="nav-link"
+        >
             Contact
         </a>
 
@@ -269,6 +321,7 @@
 
 <!-- =====================================================
      HERO
+     REAL MILKY WAY + THREE.JS
 ====================================================== -->
 
 <section
@@ -276,11 +329,22 @@
     class="hero"
 >
 
+    <!-- THREE.JS CANVAS -->
+
     <canvas
         id="webgl"
         aria-hidden="true"
     ></canvas>
 
+
+    <!-- NASA / ASTRONOMICAL IMAGE CREDIT -->
+
+    <div class="hero-image-credit">
+        MILKY WAY / NASA
+    </div>
+
+
+    <!-- ATMOSPHERIC OVERLAYS -->
 
     <div class="hero-vignette"></div>
 
@@ -291,7 +355,10 @@
     <div class="hero-noise"></div>
 
 
+    <!-- HERO CONTENT -->
+
     <div class="hero-content">
+
 
         <div class="hero-kicker">
 
@@ -333,6 +400,7 @@
 
         <div class="hero-actions">
 
+
             <a
                 href="#work"
                 class="btn btn-primary magnetic"
@@ -356,10 +424,13 @@
                 About Me
             </a>
 
+
         </div>
 
     </div>
 
+
+    <!-- SIDE INFORMATION -->
 
     <div class="hero-side-info">
 
@@ -378,7 +449,10 @@
     </div>
 
 
+    <!-- HERO FOOTER -->
+
     <div class="hero-footer">
+
 
         <div class="hero-footer-item">
             SCROLL TO EXPLORE
@@ -386,7 +460,9 @@
 
 
         <div class="scroll-track">
+
             <span></span>
+
         </div>
 
 
@@ -394,12 +470,17 @@
             01 / 05
         </div>
 
+
     </div>
 
 
+    <!-- SCROLL -->
+
     <div class="scroll-indicator">
 
-        <span class="scroll-indicator-line"></span>
+        <span
+            class="scroll-indicator-line"
+        ></span>
 
         <span>
             SCROLL
@@ -451,9 +532,12 @@
     <div class="about-layout">
 
 
+        <!-- VISUAL -->
+
         <div class="about-visual">
 
             <div class="about-orbit-scene">
+
 
                 <div class="orbit-particle particle-1"></div>
 
@@ -505,6 +589,7 @@
 
                 <div class="orbit-core-glow"></div>
 
+
             </div>
 
 
@@ -520,11 +605,15 @@
 
             </div>
 
+
         </div>
 
 
 
+        <!-- TEXT -->
+
         <div class="about-text">
+
 
             <div class="about-intro-label">
                 HELLO, I'M RAJ.
@@ -534,9 +623,12 @@
             <p class="large-text">
 
                 I create digital experiences
-                where <span>technology</span>,
-                <span>design</span> and
-                <span>motion</span> meet.
+                where
+                <span>technology</span>,
+                <span>design</span>
+                and
+                <span>motion</span>
+                meet.
 
             </p>
 
@@ -617,37 +709,56 @@
 
                 </div>
 
+
             </div>
+
 
         </div>
 
     </div>
 
 
+    <!-- ABOUT STATEMENT -->
+
     <div class="about-statement">
 
-        <span>CODE</span>
+        <span>
+            CODE
+        </span>
 
-        <span>×</span>
+        <span>
+            ×
+        </span>
 
-        <span>DESIGN</span>
+        <span>
+            DESIGN
+        </span>
 
-        <span>×</span>
+        <span>
+            ×
+        </span>
 
-        <span>MOTION</span>
+        <span>
+            MOTION
+        </span>
 
-        <span>×</span>
+        <span>
+            ×
+        </span>
 
-        <span>EXPERIENCE</span>
+        <span>
+            EXPERIENCE
+        </span>
 
     </div>
+
 
 </section>
 
 
 
 <!-- =====================================================
-     WORK / PROJECT WALL
+     WORK
 ====================================================== -->
 
 <section
@@ -655,12 +766,14 @@
     class="section work"
 >
 
+
     <div class="section-index">
         02
     </div>
 
 
     <div class="section-header">
+
 
         <div class="eyebrow">
             SELECTED WORK
@@ -677,18 +790,23 @@
 
         </h2>
 
+
     </div>
+
 
 
     <div class="projects">
 
 
-        <!-- PROJECT VOID -->
+        <!-- =================================================
+             PROJECT VOID
+        ================================================== -->
 
         <article
             class="project-card project-void-card"
             data-project="void"
         >
+
 
             <a
                 href="https://rajpathak158.github.io/project-void/"
@@ -696,6 +814,7 @@
                 rel="noopener noreferrer"
                 class="project-visual"
             >
+
 
                 <div class="project-top">
 
@@ -742,10 +861,12 @@
                     ↗
                 </div>
 
+
             </a>
 
 
             <div class="project-details">
+
 
                 <div class="project-meta">
                     3D GAME · THREE.JS
@@ -781,18 +902,23 @@
 
                 </a>
 
+
             </div>
+
 
         </article>
 
 
 
-        <!-- PREACH LAW -->
+        <!-- =================================================
+             PEACH LAW
+        ================================================== -->
 
         <article
             class="project-card project-law-card"
             data-project="law"
         >
+
 
             <a
                 href="https://rajpathak158.github.io/Peach-law-2.0/"
@@ -800,6 +926,7 @@
                 rel="noopener noreferrer"
                 class="project-visual"
             >
+
 
                 <div class="law-image"></div>
 
@@ -850,10 +977,12 @@
                     ↗
                 </div>
 
+
             </a>
 
 
             <div class="project-details">
+
 
                 <div class="project-meta">
                     WEB DESIGN · LAW FIRM
@@ -861,7 +990,7 @@
 
 
                 <h3>
-                    Preach Law &amp; Co.
+                    Peach Law 2.0
                 </h3>
 
 
@@ -890,18 +1019,23 @@
 
                 </a>
 
+
             </div>
+
 
         </article>
 
 
 
-        <!-- BLACK HOLE -->
+        <!-- =================================================
+             BLACK HOLE
+        ================================================== -->
 
         <article
             class="project-card project-blackhole-card"
             data-project="blackhole"
         >
+
 
             <a
                 href="https://rajpathak158.github.io/black-hole-last-orbit/"
@@ -909,6 +1043,7 @@
                 rel="noopener noreferrer"
                 class="project-visual"
             >
+
 
                 <div class="space-background"></div>
 
@@ -976,10 +1111,12 @@
                     ↗
                 </div>
 
+
             </a>
 
 
             <div class="project-details">
+
 
                 <div class="project-meta">
                     CREATIVE WEB · SPACE
@@ -1016,7 +1153,9 @@
 
                 </a>
 
+
             </div>
+
 
         </article>
 
@@ -1036,6 +1175,7 @@
     class="section skills"
 >
 
+
     <div class="skills-grid-bg"></div>
 
     <div class="skills-glow"></div>
@@ -1047,6 +1187,7 @@
 
 
     <div class="section-header">
+
 
         <div class="eyebrow">
             TECHNOLOGY / 03
@@ -1072,6 +1213,7 @@
 
         </p>
 
+
     </div>
 
 
@@ -1079,11 +1221,14 @@
     <div class="skills-system">
 
 
+        <!-- CENTER -->
+
         <div class="skills-center">
 
             <div class="skills-center-ring"></div>
 
             <div class="skills-center-ring ring-2"></div>
+
 
             <div class="skills-center-core">
 
@@ -1101,7 +1246,7 @@
 
 
 
-        <!-- 01 -->
+        <!-- HTML -->
 
         <article
             class="skill-card"
@@ -1143,7 +1288,7 @@
 
 
 
-        <!-- 02 -->
+        <!-- CSS -->
 
         <article
             class="skill-card"
@@ -1166,6 +1311,7 @@
                     CSS
                 </h3>
 
+
                 <p>
                     Visual systems, responsive
                     layouts and advanced effects.
@@ -1185,7 +1331,7 @@
 
 
 
-        <!-- 03 -->
+        <!-- JAVASCRIPT -->
 
         <article
             class="skill-card"
@@ -1208,6 +1354,7 @@
                     JavaScript
                 </h3>
 
+
                 <p>
                     Interaction, logic and dynamic
                     browser experiences.
@@ -1227,7 +1374,7 @@
 
 
 
-        <!-- 04 -->
+        <!-- THREE JS -->
 
         <article
             class="skill-card"
@@ -1250,6 +1397,7 @@
                     Three.js
                 </h3>
 
+
                 <p>
                     Interactive 3D environments
                     and WebGL experiences.
@@ -1269,7 +1417,7 @@
 
 
 
-        <!-- 05 -->
+        <!-- GSAP -->
 
         <article
             class="skill-card"
@@ -1292,6 +1440,7 @@
                     GSAP
                 </h3>
 
+
                 <p>
                     Smooth animation systems,
                     transitions and motion design.
@@ -1311,7 +1460,7 @@
 
 
 
-        <!-- 06 -->
+        <!-- WEBGL -->
 
         <article
             class="skill-card"
@@ -1334,6 +1483,7 @@
                     WebGL
                 </h3>
 
+
                 <p>
                     Hardware accelerated graphics
                     for immersive interfaces.
@@ -1353,7 +1503,7 @@
 
 
 
-        <!-- 07 -->
+        <!-- GITHUB -->
 
         <article
             class="skill-card"
@@ -1376,9 +1526,10 @@
                     GitHub
                 </h3>
 
+
                 <p>
                     Version control, deployment
-                    and collaborative development.
+                    and development.
                 </p>
 
             </div>
@@ -1395,7 +1546,7 @@
 
 
 
-        <!-- 08 -->
+        <!-- UI UX -->
 
         <article
             class="skill-card"
@@ -1417,6 +1568,7 @@
                 <h3>
                     UI / UX
                 </h3>
+
 
                 <p>
                     Interfaces designed around
@@ -1458,12 +1610,13 @@
 
     </div>
 
+
 </section>
 
 
 
 <!-- =====================================================
-     CONTACT — FINAL EXPERIENCE
+     CONTACT
 ====================================================== -->
 
 <section
@@ -1471,13 +1624,15 @@
     class="section contact"
 >
 
-    <!-- BACKGROUND -->
+
+    <!-- CONTACT SPACE -->
 
     <div class="contact-space"></div>
 
     <div class="contact-stars"></div>
 
     <div class="contact-glow"></div>
+
 
 
     <!-- ORBITAL SYSTEM -->
@@ -1506,12 +1661,15 @@
     </div>
 
 
+
     <div class="section-index">
         04
     </div>
 
 
+
     <div class="contact-content">
+
 
         <div class="eyebrow">
             LET'S CONNECT / 04
@@ -1539,6 +1697,7 @@
         </p>
 
 
+
         <!-- EMAIL -->
 
         <a
@@ -1557,9 +1716,11 @@
         </a>
 
 
-        <!-- SOCIAL -->
+
+        <!-- SOCIAL LINKS -->
 
         <div class="social-links">
+
 
             <a
                 href="#"
@@ -1608,18 +1769,24 @@
 
             </a>
 
+
         </div>
 
+
     </div>
+
 
 
     <!-- STATUS -->
 
     <div class="contact-status">
 
+
         <div>
 
-            <span class="contact-status-dot"></span>
+            <span
+                class="contact-status-dot"
+            ></span>
 
             <span>
                 AVAILABLE FOR CREATIVE PROJECTS
@@ -1632,12 +1799,15 @@
             INDIA / 2026
         </div>
 
+
     </div>
+
 
 
     <!-- FOOTER -->
 
     <footer class="site-footer">
+
 
         <div class="footer-left">
 
@@ -1663,15 +1833,19 @@
                 © 2026 RAJ PATHAK
             </span>
 
+
             <a href="#home">
                 BACK TO TOP ↑
             </a>
 
         </div>
 
+
     </footer>
 
+
 </section>
+
 
 
 </main>
@@ -1679,7 +1853,7 @@
 
 
 <!-- =====================================================
-     JAVASCRIPT
+     SCRIPTS
 ====================================================== -->
 
 <script
@@ -1695,4 +1869,4 @@
 
 </body>
 
-                </html>
+            </html>
