@@ -1,6 +1,6 @@
 /* =========================================================
    RAJ PATHAK PORTFOLIO
-   STEP 11 — REAL MILKY WAY 3D HERO
+   STEP 12 — CINEMATIC MILKY WAY DEPTH
 ========================================================= */
 
 import * as THREE from
@@ -8,22 +8,31 @@ import * as THREE from
 
 
 /* =========================================================
-   SETUP
+   DOM
 ========================================================= */
 
-const canvas = document.getElementById("webgl");
+const canvas =
+    document.getElementById("webgl");
+
 
 if (!canvas) {
-    console.warn("WebGL canvas not found.");
+
+    console.warn(
+        "WebGL canvas not found."
+    );
+
 }
 
 
 /* =========================================================
-   DEVICE PERFORMANCE
+   DEVICE / PERFORMANCE
 ========================================================= */
 
 const isMobile =
-    window.matchMedia("(max-width: 700px)").matches;
+    window.matchMedia(
+        "(max-width: 700px)"
+    ).matches;
+
 
 const prefersReducedMotion =
     window.matchMedia(
@@ -31,27 +40,52 @@ const prefersReducedMotion =
     ).matches;
 
 
-const renderer = new THREE.WebGLRenderer({
+const particleCount =
+    isMobile ? 160 : 320;
 
-    canvas,
 
-    alpha: true,
+/* =========================================================
+   RENDERER
+========================================================= */
 
-    antialias:
-        !isMobile,
+const renderer =
+    new THREE.WebGLRenderer({
 
-    powerPreference:
-        "high-performance"
+        canvas,
 
-});
+        alpha: true,
+
+        antialias:
+            !isMobile,
+
+        powerPreference:
+            "high-performance"
+
+    });
 
 
 renderer.setPixelRatio(
 
     Math.min(
+
         window.devicePixelRatio || 1,
-        isMobile ? 1.25 : 1.75
+
+        isMobile
+            ? 1.2
+            : 1.5
+
     )
+
+);
+
+
+renderer.setSize(
+
+    window.innerWidth,
+
+    window.innerHeight,
+
+    false
 
 );
 
@@ -60,68 +94,94 @@ renderer.setPixelRatio(
    SCENE
 ========================================================= */
 
-const scene = new THREE.Scene();
+const scene =
+    new THREE.Scene();
 
 
 /* =========================================================
    CAMERA
 ========================================================= */
 
-const camera = new THREE.PerspectiveCamera(
+const camera =
+    new THREE.PerspectiveCamera(
 
-    45,
+        48,
 
-    window.innerWidth /
+        window.innerWidth /
         window.innerHeight,
 
-    0.1,
+        0.1,
 
-    100
+        100
+
+    );
+
+
+camera.position.set(
+
+    0,
+
+    0,
+
+    8
 
 );
 
-camera.position.z = 8;
-
 
 /* =========================================================
-   REAL MILKY WAY BACKGROUND
+   REAL MILKY WAY
 ========================================================= */
 
-const backgroundTextureLoader =
+const loader =
     new THREE.TextureLoader();
 
 
-const backgroundTexture =
-    backgroundTextureLoader.load(
+const galaxyTexture =
+    loader.load(
 
         "./assets/milky-way.jpg",
 
-        () => {
+        (texture) => {
 
-            backgroundTexture.colorSpace =
+            texture.colorSpace =
                 THREE.SRGBColorSpace;
+
+            texture.anisotropy =
+                Math.min(
+
+                    renderer.capabilities
+                        .getMaxAnisotropy(),
+
+                    4
+
+                );
+
+            resizeGalaxy();
 
         }
 
     );
 
 
-const backgroundMaterial =
+const galaxyMaterial =
     new THREE.MeshBasicMaterial({
 
         map:
-            backgroundTexture,
+            galaxyTexture,
 
         transparent:
             true,
 
         opacity:
-            0.95
+            1,
+
+        depthWrite:
+            false
 
     });
 
 
-const backgroundGeometry =
+const galaxyGeometry =
     new THREE.PlaneGeometry(
 
         2,
@@ -131,45 +191,51 @@ const backgroundGeometry =
     );
 
 
-const backgroundPlane =
+const galaxy =
     new THREE.Mesh(
 
-        backgroundGeometry,
+        galaxyGeometry,
 
-        backgroundMaterial
+        galaxyMaterial
 
     );
 
 
-backgroundPlane.position.z =
+galaxy.position.z =
     -8;
 
 
 scene.add(
-    backgroundPlane
+    galaxy
 );
 
 
 /* =========================================================
-   DEPTH OVERLAY
+   ATMOSPHERIC DEPTH LAYER
 ========================================================= */
 
-const depthMaterial =
+const atmosphereMaterial =
     new THREE.MeshBasicMaterial({
 
         color:
-            0x05030f,
+            0x34256f,
 
         transparent:
             true,
 
         opacity:
-            0.16
+            0.085,
+
+        depthWrite:
+            false,
+
+        blending:
+            THREE.AdditiveBlending
 
     });
 
 
-const depthGeometry =
+const atmosphereGeometry =
     new THREE.PlaneGeometry(
 
         2,
@@ -179,43 +245,42 @@ const depthGeometry =
     );
 
 
-const depthPlane =
+const atmosphere =
     new THREE.Mesh(
 
-        depthGeometry,
+        atmosphereGeometry,
 
-        depthMaterial
+        atmosphereMaterial
 
     );
 
 
-depthPlane.position.z =
-    -7.8;
+atmosphere.position.z =
+    -6.5;
 
 
 scene.add(
-    depthPlane
+    atmosphere
 );
 
 
 /* =========================================================
-   STAR PARTICLES
-   Lightweight — NOT thousands of particles
+   FOREGROUND STAR FIELD
 ========================================================= */
 
-const particleCount =
-    isMobile ? 220 : 420;
-
-
-const particlePositions =
+const positions =
     new Float32Array(
+
         particleCount * 3
+
     );
 
 
-const particleSizes =
+const sizes =
     new Float32Array(
+
         particleCount
+
     );
 
 
@@ -229,36 +294,45 @@ for (
         i * 3;
 
 
-    particlePositions[i3] =
-        (Math.random() - 0.5) * 18;
+    positions[i3] =
+        (
+            Math.random() -
+            0.5
+        ) * 18;
 
 
-    particlePositions[i3 + 1] =
-        (Math.random() - 0.5) * 10;
+    positions[i3 + 1] =
+        (
+            Math.random() -
+            0.5
+        ) * 11;
 
 
-    particlePositions[i3 + 2] =
-        (Math.random() - 0.5) * 8;
+    positions[i3 + 2] =
+        (
+            Math.random() -
+            0.5
+        ) * 6;
 
 
-    particleSizes[i] =
-        0.5 +
-        Math.random() * 1.2;
+    sizes[i] =
+        0.4 +
+        Math.random() * 1.1;
 
 }
 
 
-const particleGeometry =
+const starGeometry =
     new THREE.BufferGeometry();
 
 
-particleGeometry.setAttribute(
+starGeometry.setAttribute(
 
     "position",
 
     new THREE.BufferAttribute(
 
-        particlePositions,
+        positions,
 
         3
 
@@ -267,13 +341,13 @@ particleGeometry.setAttribute(
 );
 
 
-particleGeometry.setAttribute(
+starGeometry.setAttribute(
 
     "size",
 
     new THREE.BufferAttribute(
 
-        particleSizes,
+        sizes,
 
         1
 
@@ -282,7 +356,7 @@ particleGeometry.setAttribute(
 );
 
 
-const particleMaterial =
+const starMaterial =
     new THREE.PointsMaterial({
 
         color:
@@ -290,14 +364,14 @@ const particleMaterial =
 
         size:
             isMobile
-                ? 0.018
-                : 0.024,
+                ? 0.017
+                : 0.022,
 
         transparent:
             true,
 
         opacity:
-            0.55,
+            0.48,
 
         depthWrite:
             false,
@@ -311,15 +385,15 @@ const particleMaterial =
 const stars =
     new THREE.Points(
 
-        particleGeometry,
+        starGeometry,
 
-        particleMaterial
+        starMaterial
 
     );
 
 
 stars.position.z =
-    -4;
+    -3;
 
 
 scene.add(
@@ -328,20 +402,36 @@ scene.add(
 
 
 /* =========================================================
-   PARALLAX
+   INPUT STATE
 ========================================================= */
 
-let targetMouseX = 0;
+let mouseX = 0;
 
-let targetMouseY = 0;
+let mouseY = 0;
 
-let currentMouseX = 0;
+let targetX = 0;
 
-let currentMouseY = 0;
+let targetY = 0;
 
+
+/*
+   Device orientation
+*/
+
+let gyroX = 0;
+
+let gyroY = 0;
+
+let targetGyroX = 0;
+
+let targetGyroY = 0;
+
+
+/* =========================================================
+   MOUSE PARALLAX
+========================================================= */
 
 if (
-    !isMobile &&
     !prefersReducedMotion
 ) {
 
@@ -351,21 +441,321 @@ if (
 
         (event) => {
 
-            targetMouseX =
-                (event.clientX /
-                    window.innerWidth -
-                    0.5);
+            targetX =
+                (
+                    event.clientX /
+                    window.innerWidth
+                ) * 2 - 1;
 
-            targetMouseY =
-                (event.clientY /
-                    window.innerHeight -
-                    0.5);
+
+            targetY =
+                (
+                    event.clientY /
+                    window.innerHeight
+                ) * 2 - 1;
 
         },
 
         {
             passive: true
         }
+
+    );
+
+}
+
+
+/* =========================================================
+   TOUCH PARALLAX
+========================================================= */
+
+if (
+    isMobile &&
+    !prefersReducedMotion
+) {
+
+    window.addEventListener(
+
+        "touchmove",
+
+        (event) => {
+
+            if (
+                !event.touches ||
+                !event.touches.length
+            ) {
+                return;
+            }
+
+
+            const touch =
+                event.touches[0];
+
+
+            targetX =
+                (
+                    touch.clientX /
+                    window.innerWidth
+                ) * 2 - 1;
+
+
+            targetY =
+                (
+                    touch.clientY /
+                    window.innerHeight
+                ) * 2 - 1;
+
+        },
+
+        {
+            passive: true
+        }
+
+    );
+
+}
+
+
+/* =========================================================
+   DEVICE GYROSCOPE
+========================================================= */
+
+function handleOrientation(
+    event
+) {
+
+    if (
+        prefersReducedMotion
+    ) {
+        return;
+    }
+
+
+    if (
+        typeof event.gamma ===
+        "number"
+    ) {
+
+        targetGyroX =
+            THREE.MathUtils.clamp(
+
+                event.gamma / 30,
+
+                -1,
+
+                1
+
+            );
+
+    }
+
+
+    if (
+        typeof event.beta ===
+        "number"
+    ) {
+
+        targetGyroY =
+            THREE.MathUtils.clamp(
+
+                (
+                    event.beta - 45
+                ) / 30,
+
+                -1,
+
+                1
+
+            );
+
+    }
+
+}
+
+
+function enableGyroscope() {
+
+    if (
+        typeof DeviceOrientationEvent ===
+        "undefined"
+    ) {
+
+        return;
+
+    }
+
+
+    window.addEventListener(
+
+        "deviceorientation",
+
+        handleOrientation,
+
+        true
+
+    );
+
+}
+
+
+/*
+   Some mobile browsers require permission.
+*/
+
+if (
+    isMobile &&
+    typeof DeviceOrientationEvent !==
+    "undefined" &&
+    typeof DeviceOrientationEvent
+        .requestPermission ===
+        "function"
+) {
+
+    window.addEventListener(
+
+        "click",
+
+        async () => {
+
+            try {
+
+                const permission =
+                    await DeviceOrientationEvent
+                        .requestPermission();
+
+
+                if (
+                    permission ===
+                    "granted"
+                ) {
+
+                    enableGyroscope();
+
+                }
+
+            } catch (
+                error
+            ) {
+
+                console.warn(
+                    "Gyroscope permission unavailable."
+                );
+
+            }
+
+        },
+
+        {
+            once: true
+        }
+
+    );
+
+} else {
+
+    enableGyroscope();
+
+}
+
+
+/* =========================================================
+   GALAXY COVER CALCULATION
+========================================================= */
+
+function resizeGalaxy() {
+
+    if (
+        !galaxyTexture.image
+    ) {
+
+        return;
+
+    }
+
+
+    const width =
+        window.innerWidth;
+
+
+    const height =
+        window.innerHeight;
+
+
+    const viewportRatio =
+        width / height;
+
+
+    const imageWidth =
+        galaxyTexture.image.width;
+
+
+    const imageHeight =
+        galaxyTexture.image.height;
+
+
+    const imageRatio =
+        imageWidth /
+        imageHeight;
+
+
+    let scaleX = 1;
+
+    let scaleY = 1;
+
+
+    /*
+       Cover the viewport.
+    */
+
+    if (
+        viewportRatio >
+        imageRatio
+    ) {
+
+        scaleY =
+            viewportRatio /
+            imageRatio;
+
+    } else {
+
+        scaleX =
+            imageRatio /
+            viewportRatio;
+
+    }
+
+
+    /*
+       Add a little extra size.
+
+       This is important because the
+       image moves with parallax and
+       should never reveal its edges.
+    */
+
+    scaleX *= 1.16;
+
+    scaleY *= 1.16;
+
+
+    galaxy.scale.set(
+
+        scaleX,
+
+        scaleY,
+
+        1
+
+    );
+
+
+    atmosphere.scale.set(
+
+        scaleX,
+
+        scaleY,
+
+        1
 
     );
 
@@ -381,6 +771,7 @@ function resize() {
     const width =
         window.innerWidth;
 
+
     const height =
         window.innerHeight;
 
@@ -393,81 +784,31 @@ function resize() {
 
 
     renderer.setSize(
+
         width,
+
         height,
+
         false
+
     );
 
 
-    /*
-       Keep the image covering the viewport.
-    */
-
-    const aspect =
-        width / height;
-
-
-    if (
-        backgroundTexture.image
-    ) {
-
-        const imageWidth =
-            backgroundTexture.image.width;
-
-        const imageHeight =
-            backgroundTexture.image.height;
-
-        const imageAspect =
-            imageWidth /
-            imageHeight;
-
-
-        let scaleX = 1;
-
-        let scaleY = 1;
-
-
-        if (
-            aspect > imageAspect
-        ) {
-
-            scaleY =
-                aspect /
-                imageAspect;
-
-        } else {
-
-            scaleX =
-                imageAspect /
-                aspect;
-
-        }
-
-
-        backgroundPlane.scale.set(
-            scaleX,
-            scaleY,
-            1
-        );
-
-
-        depthPlane.scale.set(
-            scaleX,
-            scaleY,
-            1
-        );
-
-    }
+    resizeGalaxy();
 
 }
 
 
 window.addEventListener(
+
     "resize",
+
     resize,
+
     {
         passive: true
     }
+
 );
 
 
@@ -475,7 +816,7 @@ resize();
 
 
 /* =========================================================
-   ANIMATION
+   SMOOTH MOTION
 ========================================================= */
 
 const clock =
@@ -489,7 +830,7 @@ function animate() {
     );
 
 
-    const elapsed =
+    const time =
         clock.getElapsedTime();
 
 
@@ -497,77 +838,155 @@ function animate() {
         !prefersReducedMotion
     ) {
 
-        /*
-           Smooth mouse interpolation
-        */
 
-        currentMouseX +=
+        /* ===============================================
+           SMOOTH MOUSE
+        =============================================== */
+
+        mouseX +=
             (
-                targetMouseX -
-                currentMouseX
+                targetX -
+                mouseX
             ) * 0.035;
 
 
-        currentMouseY +=
+        mouseY +=
             (
-                targetMouseY -
-                currentMouseY
+                targetY -
+                mouseY
             ) * 0.035;
 
 
+        /* ===============================================
+           SMOOTH GYROSCOPE
+        =============================================== */
+
+        gyroX +=
+            (
+                targetGyroX -
+                gyroX
+            ) * 0.025;
+
+
+        gyroY +=
+            (
+                targetGyroY -
+                gyroY
+            ) * 0.025;
+
+
         /*
-           Real galaxy movement
+           Combine mouse + gyro.
         */
 
-        backgroundPlane.position.x =
-            currentMouseX * 0.12;
+        const inputX =
+            isMobile
+                ? gyroX
+                : mouseX;
 
 
-        backgroundPlane.position.y =
-            currentMouseY * 0.08;
+        const inputY =
+            isMobile
+                ? gyroY
+                : mouseY;
 
 
-        /*
-           Slight cinematic drift
-        */
+        /* ===============================================
+           REAL GALAXY
+           Deepest layer = smallest movement
+        =============================================== */
 
-        backgroundPlane.rotation.z =
+        galaxy.position.x =
+            inputX * 0.13;
+
+
+        galaxy.position.y =
+            -inputY * 0.09;
+
+
+        galaxy.rotation.z =
             Math.sin(
-                elapsed * 0.035
+                time * 0.025
             ) * 0.0015;
 
 
-        /*
-           Depth layer moves differently
-        */
+        /* ===============================================
+           ATMOSPHERE
+           Middle depth
+        =============================================== */
 
-        depthPlane.position.x =
-            currentMouseX * 0.20;
-
-
-        depthPlane.position.y =
-            currentMouseY * 0.14;
+        atmosphere.position.x =
+            inputX * 0.22;
 
 
-        /*
-           Stars move slightly faster
-        */
+        atmosphere.position.y =
+            -inputY * 0.16;
+
+
+        atmosphere.rotation.z =
+            Math.sin(
+                time * 0.035
+            ) * 0.002;
+
+
+        /* ===============================================
+           STARS
+           Foreground = stronger movement
+        =============================================== */
+
+        stars.position.x =
+            inputX * 0.42;
+
+
+        stars.position.y =
+            -inputY * 0.30;
+
 
         stars.rotation.y =
-            elapsed * 0.004;
+            time * 0.0025;
 
 
         stars.rotation.x =
             Math.sin(
-                elapsed * 0.08
-            ) * 0.008;
+                time * 0.07
+            ) * 0.006;
+
+
+        /* ===============================================
+           CAMERA
+           Extremely subtle
+        =============================================== */
+
+        camera.position.x +=
+            (
+                inputX * 0.075 -
+                camera.position.x
+            ) * 0.025;
+
+
+        camera.position.y +=
+            (
+                -inputY * 0.055 -
+                camera.position.y
+            ) * 0.025;
+
+
+        camera.rotation.z +=
+            (
+                inputX * 0.0015 -
+                camera.rotation.z
+            ) * 0.02;
+
 
     }
 
 
     renderer.render(
+
         scene,
+
         camera
+
     );
 
 }
@@ -577,12 +996,22 @@ animate();
 
 
 /* =========================================================
-   VISIBILITY OPTIMIZATION
+   TAB / VISIBILITY OPTIMIZATION
 ========================================================= */
 
 document.addEventListener(
+
     "visibilitychange",
+
     () => {
+
+        /*
+           The browser automatically throttles
+           requestAnimationFrame when hidden.
+           We intentionally don't destroy the
+           renderer because rebuilding WebGL
+           contexts can be expensive on mobile.
+        */
 
         if (
             document.hidden
@@ -592,13 +1021,8 @@ document.addEventListener(
                 null
             );
 
-        } else {
-
-            renderer.setAnimationLoop(
-                animate
-            );
-
         }
 
     }
+
 );
